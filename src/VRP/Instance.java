@@ -129,8 +129,8 @@ public class Instance {
         return distanceMaxJour;
     }
 
-    public static double[][] getDistances() {
-        return distances;
+    public static double getDistance(int i, int j) {
+        return distances[i][j];
     }
 
     public static int[] getscores() {
