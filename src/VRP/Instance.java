@@ -39,7 +39,7 @@ public class Instance {
         while (scanner.hasNextLine()){
             String line = scanner.nextLine();
             String[] lineSplit = line.split("\t");
-            if(line == "" || line.startsWith("-")){
+            if(line.isEmpty() || line.startsWith("-")){
                 continue;
             }else{
                 switch (nbLine) {
@@ -85,11 +85,13 @@ public class Instance {
         }
         distances = new double[nbDestination][nbDestination];
         for(int i = 0; i < nbDestination ; i++){
-            for(int j = 0; j < nbDestination ; j++){
+            for(int j = i; j < nbDestination ; j++){
                 if(i == j){
                     distances[i][j] = 0;
                 }else{
-                    distances[i][j] = Math.sqrt(Math.pow(coord[i][0] - coord[j][0], 2) + Math.pow(coord[i][1] - coord[j][1], 2));
+                    double dist = Math.sqrt(Math.pow(coord[i][0] - coord[j][0], 2) + Math.pow(coord[i][1] - coord[j][1], 2));
+                    distances[i][j] = dist;
+                    distances[j][i] = dist;
                 }
             }
         }
