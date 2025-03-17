@@ -40,6 +40,7 @@ public class Instance {
             String line = scanner.nextLine();
             String[] lineSplit = line.split("\t");
             if(line == "" || line.startsWith("-")){
+                continue;
             }else{
                 switch (nbLine) {
                     case 0:
@@ -129,11 +130,23 @@ public class Instance {
         return distanceMaxJour;
     }
 
+    public static double getDistanceMaxJour(int i){
+        return distanceMaxJour[i];
+    }
+
+    public static double[][] getDistances() {
+        return distances;
+    }
+
     public static double getDistance(int i, int j) {
         return distances[i][j];
     }
 
-    public static int[] getscores() {
+    public static int[] getScores() {
         return scores;
+    }
+
+    public static int getScore(int i){
+        return scores[i];
     }
 }
