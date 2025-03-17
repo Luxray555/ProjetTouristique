@@ -1,5 +1,9 @@
 package VRP;
 
+import VRP.solution.CWSolution;
+import VRP.solution.NearestNeighborSolution;
+import VRP.solution.Solution;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,14 +27,18 @@ public class Solver {
 
     public boolean solveConstruct(Solution s){
         String construct = parameters.get("CONSTRUCT");
-        if ("0".equals(construct)) {
-            return true;
-        }
-        else if ("1".equals(construct)) {
-            return true;
-        } else {
-            System.err.println("Parametre de construction invalide(CONSTRUCT): " + construct);
-            return false;
+        switch (construct) {
+            case "0":
+                s = new NearestNeighborSolution();
+                s.construct();
+                return true;
+            case "1":
+                s = new CWSolution();
+                s.construct();
+                return true;
+            default:
+                System.err.println("Parametre de construction invalide(CONSTRUCT): " + construct);
+                return false;
         }
     }
 
@@ -60,9 +68,9 @@ public class Solver {
 
     public void solve(){
         if (parameters.containsKey("INPUT") && parameters.containsKey("METHOD")) {
+            long start = System.currentTimeMillis();
             if (Instance.readFile(parameters.get("INPUT"))) {
-                Solution s = new Solution();
-                long start = System.currentTimeMillis();
+                Solution s = null;
                 if (solveConstruct(s)) {
                     long end = System.currentTimeMillis();
                     output(s, (end - start) / 1000.0);

@@ -1,9 +1,14 @@
-package VRP;
+package VRP.solution;
+
+import VRP.Instance;
+import VRP.Node;
+import VRP.NodeType;
+import VRP.Route;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Solution {
+public abstract class Solution {
     private List<Route> routes;
     private List<Node> nodes;
     private double score;
@@ -43,6 +48,8 @@ public class Solution {
     public void setScore(double score) {
         this.score = score;
     }
+
+    public abstract void construct();
 
     @Override
     public String toString() {
