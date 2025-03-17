@@ -1,9 +1,9 @@
-import VRP.Instance;
+import VRP.Solver;
 
 public class Main {
 
     public static void main(String[] args){
-        Instance.readFile("data/instance22.txt");
-        Instance.showInfo();
+        Solver solver = new Solver(new String[]{"INPUT=data/instance1.txt", "CONSTRUCT=0", "METHOD=0", "OUTPUT=result/Instance1.sol"});
+        solver.solve();
     }
 }

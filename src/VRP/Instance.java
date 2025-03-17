@@ -15,8 +15,6 @@ public class Instance {
 
     private static int nbHotelSupp;
 
-    private static int nbHotel = 2;
-
     private static double[] distanceMaxJour;
 
     private static double[][] distances;
@@ -25,7 +23,7 @@ public class Instance {
 
     private Instance(){}
 
-    public static void readFile(String stringPath){
+    public static boolean readFile(String stringPath){
         File file = null;
         Scanner scanner = null;
         try{
@@ -33,6 +31,7 @@ public class Instance {
             scanner = new Scanner(file);
         }catch(NullPointerException | FileNotFoundException e){
             System.err.println("Fichier non trouvé.");
+            return false;
         }
         int nbLine = 0;
         double[][] coord = null;
@@ -49,7 +48,7 @@ public class Instance {
                             nbDestination = Integer.parseInt(lineSplit[0]) + nbHotelSupp;
                             coord = new double[nbDestination][2];
                             scores = new int[nbDestination];
-                            nbSiteTouristique = nbDestination - nbHotelSupp - nbHotel;
+                            nbSiteTouristique = nbDestination - nbHotelSupp - 2;
                             jours = Integer.parseInt(lineSplit[2]);
                             distanceMaxJour = new double[jours];
                         }catch (NumberFormatException | IndexOutOfBoundsException e){
@@ -66,17 +65,20 @@ public class Instance {
                             }
                         }catch (NumberFormatException | IndexOutOfBoundsException e){
                             System.err.println("Ligne " + nbLine + " : Les distances ne sont pas dans le bon format.");
+                            return false;
                         } catch (Exception e) {
                             System.err.println("Ligne " + nbLine + " : Nombre de jours ne coincide pas avec le tableau de distance max journalière." + lineSplit.length + " = " + jours);
+                            return false;
                         }
                         break;
                     default:
                         try{
-                            coord[nbLine - 3][0] = Double.parseDouble(lineSplit[0]);
-                            coord[nbLine - 3][1] = Double.parseDouble(lineSplit[1]);
-                            scores[nbLine - 3] = Integer.parseInt(lineSplit[2]);
-                        }catch (NumberFormatException e){
+                            coord[nbLine - 2][0] = Double.parseDouble(lineSplit[0]);
+                            coord[nbLine - 2][1] = Double.parseDouble(lineSplit[1]);
+                            scores[nbLine - 2] = Integer.parseInt(lineSplit[2]);
+                        }catch (NumberFormatException | ArrayIndexOutOfBoundsException e){
                             System.err.println("Ligne " + nbLine + " : Format coordonnée/scores non valide.");
+                            return false;
                         }
                         break;
                 }
@@ -95,12 +97,13 @@ public class Instance {
                 }
             }
         }
+        return true;
     }
 
     public static void showInfo(){
         System.out.println("Nb Destination : " + nbDestination);
         System.out.println("Nb Site T : " + nbSiteTouristique);
-        System.out.println("Nb Hotel " + nbHotel);
+        System.out.println("Nb Hotel " + 2);
         System.out.println("Nb Hotel Supp : " + nbHotelSupp);
         System.out.println("Jours : " + jours);
         System.out.println("Distance Max Jours : " + Arrays.toString(distanceMaxJour));
@@ -113,7 +116,7 @@ public class Instance {
     }
 
     public static int getNbHotel(){
-        return nbHotel;
+        return 2 + nbHotelSupp;
     }
 
     public static int getJours() {

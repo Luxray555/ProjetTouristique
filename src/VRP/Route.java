@@ -2,6 +2,7 @@ package VRP;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Route {
     private int id;
@@ -23,6 +24,7 @@ public class Route {
             distanceTotal += Instance.getDistance(node.getId(), nodes.get(0).getId());
         }
         this.nodes.add(0, node);
+        node.addRoute(this);
         scoreTotal += node.getScore();
     }
 
@@ -31,6 +33,7 @@ public class Route {
             distanceTotal += Instance.getDistance(nodes.get(nodes.size() - 1).getId(), node.getId());
         }
         this.nodes.add(node);
+        node.addRoute(this);
         scoreTotal += node.getScore();
     }
 
@@ -45,6 +48,7 @@ public class Route {
                 distanceTotal += Instance.getDistance(node1.getId(), node2.getId());
             }
             this.nodes.add(index + 1, node2);
+            node2.addRoute(this);
             scoreTotal += node2.getScore();
         }
     }
@@ -60,18 +64,24 @@ public class Route {
                 distanceTotal += Instance.getDistance(node2.getId(), node1.getId());
             }
             this.nodes.add(index, node2);
+            node2.addRoute(this);
             scoreTotal += node2.getScore();
         }
     }
 
-    public void removeNode(int index){
-        if (index > 0 && index < nodes.size() - 1) {
-            distanceTotal -= Instance.getDistance(nodes.get(index - 1).getId(), nodes.get(index).getId());
-            distanceTotal -= Instance.getDistance(nodes.get(index).getId(), nodes.get(index + 1).getId());
-            distanceTotal += Instance.getDistance(nodes.get(index - 1).getId(), nodes.get(index + 1).getId());
+    public void removeNode(Node node){
+        int index = nodes.indexOf(node);
+        if (index != -1) {
+            if (index > 0) {
+                distanceTotal -= Instance.getDistance(nodes.get(index - 1).getId(), node.getId());
+            }
+            if (index < nodes.size() - 1) {
+                distanceTotal -= Instance.getDistance(node.getId(), nodes.get(index + 1).getId());
+            }
+            scoreTotal -= node.getScore();
+            this.nodes.remove(node);
+            node.removeRoute(this);
         }
-        scoreTotal -= nodes.get(index).getScore();
-        this.nodes.remove(index);
     }
 
     public void removeFirst(){
@@ -80,7 +90,9 @@ public class Route {
                 distanceTotal -= Instance.getDistance(nodes.get(0).getId(), nodes.get(1).getId());
             }
             scoreTotal -= nodes.get(0).getScore();
+            Node node = nodes.get(0);
             this.nodes.remove(0);
+            node.removeRoute(this);
         }
     }
 
@@ -90,7 +102,9 @@ public class Route {
                 distanceTotal -= Instance.getDistance(nodes.get(nodes.size() - 2).getId(), nodes.get(nodes.size() - 1).getId());
             }
             scoreTotal -= nodes.get(nodes.size() - 1).getScore();
-            this.nodes.remove(this.nodes.size() - 1);
+            Node node = nodes.get(nodes.size() - 1);
+            this.nodes.remove(nodes.size() - 1);
+            node.removeRoute(this);
         }
     }
 
@@ -125,11 +139,6 @@ public class Route {
 
     @Override
     public String toString() {
-        return "Route{" +
-                "id=" + id +
-                ", nodes=" + nodes +
-                ", scoreTotal=" + scoreTotal +
-                ", distanceTotal=" + distanceTotal +
-                '}';
+        return "Jour " + id + " : " + nodes.stream().map(Node::toString).collect(Collectors.joining(" -> ")) + " | Score : " + scoreTotal + " | Distance : " + distanceTotal;
     }
 }

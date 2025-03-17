@@ -1,14 +1,19 @@
 package VRP;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Node {
     private int id;
-    private Route route;
+    private List<Route> routes;
     private double score;
+    private NodeType type;
 
-    public Node(int id, Route route, double score){
+    public Node(int id, double score, NodeType type) {
         this.id = id;
-        this.route = route;
         this.score = score;
+        this.routes = new ArrayList<>();
+        this.type = type;
     }
 
     public int getId() {
@@ -19,12 +24,23 @@ public class Node {
         this.id = id;
     }
 
-    public Route getRoute() {
-        return route;
+    public List<Route> getRoutes() {
+        return routes;
     }
 
-    public void setRoute(Route route) {
-        this.route = route;
+    public void setRoutes(Route... routes) {
+        this.routes = new ArrayList<>();
+        if(type == NodeType.SITE_TOURISTIQUE && routes.length > 1) return;
+        this.routes.addAll(List.of(routes));
+    }
+
+    public void addRoute(Route route) {
+        if(type == NodeType.SITE_TOURISTIQUE && !this.routes.isEmpty()) return;
+        this.routes.add(route);
+    }
+
+    public void removeRoute(Route route) {
+        this.routes.remove(route);
     }
 
     public double getScore() {
@@ -37,10 +53,16 @@ public class Node {
 
     @Override
     public String toString() {
-        return "Node{" +
-                "id=" + id +
-                ", route=" + route +
-                ", score=" + score +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        switch (type) {
+            case SITE_TOURISTIQUE:
+                sb.append("SiteTour");
+                break;
+            case HOTEL:
+                sb.append("Hotel");
+                break;
+        }
+        sb.append(id);
+        return sb.toString();
     }
 }
