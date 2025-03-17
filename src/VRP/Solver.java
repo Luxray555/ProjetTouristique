@@ -25,20 +25,21 @@ public class Solver {
         }
     }
 
-    public boolean solveConstruct(Solution s){
+    public Solution solveConstruct(){
         String construct = parameters.get("CONSTRUCT");
+        Solution s;
         switch (construct) {
             case "0":
                 s = new NearestNeighborSolution();
                 s.construct();
-                return true;
+                return s;
             case "1":
                 s = new CWSolution();
                 s.construct();
-                return true;
+                return s;
             default:
                 System.err.println("Parametre de construction invalide(CONSTRUCT): " + construct);
-                return false;
+                return null;
         }
     }
 
@@ -70,8 +71,8 @@ public class Solver {
         if (parameters.containsKey("INPUT") && parameters.containsKey("METHOD")) {
             long start = System.currentTimeMillis();
             if (Instance.readFile(parameters.get("INPUT"))) {
-                Solution s = null;
-                if (solveConstruct(s)) {
+                Solution s = solveConstruct();
+                if (s != null) {
                     long end = System.currentTimeMillis();
                     output(s, (end - start) / 1000.0);
                 }

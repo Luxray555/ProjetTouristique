@@ -55,6 +55,6 @@ public abstract class Solution {
     public String toString() {
         return "Solution :" +
                 routes.stream().map(Route::toString).reduce("", (a, b) -> a + "\n\t" + b) + "\n" +
-                "Score :" + score;
+                "Score : " + score;
     }
 }
