@@ -108,6 +108,14 @@ public class Route {
         }
     }
 
+    public Node getFirst(){
+        return nodes.get(0);
+    }
+
+    public Node getLast(){
+        return nodes.get(nodes.size() - 1);
+    }
+
     public int getId() {
         return id;
     }
@@ -137,8 +145,12 @@ public class Route {
         return distanceTotal;
     }
 
+    public double getDistanceMax(){
+        return distanceMax;
+    }
+
     @Override
     public String toString() {
-        return "Jour " + id + " : " + nodes.stream().map(Node::toString).collect(Collectors.joining(" -> ")) + " | Score : " + scoreTotal + " | Distance : " + distanceTotal;
+        return "Jour " + id + " : " + nodes.stream().map(Node::toString).collect(Collectors.joining(" -> ")) + " | Score : " + scoreTotal + " | Score : " + scoreTotal + " | Distance : " + distanceTotal + " | DistanceMax : " + distanceMax;
     }
 }

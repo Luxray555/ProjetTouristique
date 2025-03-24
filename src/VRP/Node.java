@@ -65,4 +65,8 @@ public class Node {
         sb.append(id);
         return sb.toString();
     }
+
+    public NodeType getType(){
+        return type;
+    }
 }
