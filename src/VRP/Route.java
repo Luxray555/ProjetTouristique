@@ -116,6 +116,31 @@ public class Route {
         }
     }
 
+    public void replaceSite(SiteNode node, SiteNode newNode){
+        if(sites.contains(node)){
+            int index = sites.indexOf(node);
+            if(index > 0){
+                distanceTotal -= Instance.getDistance(sites.get(index - 1).getId(), node.getId());
+                distanceTotal += Instance.getDistance(sites.get(index - 1).getId(), newNode.getId());
+            }else{
+                distanceTotal -= Instance.getDistance(hotelStart.getId(), node.getId());
+                distanceTotal += Instance.getDistance(hotelStart.getId(), newNode.getId());
+            }
+            if(index < sites.size() - 1){
+                distanceTotal -= Instance.getDistance(node.getId(), sites.get(index + 1).getId());
+                distanceTotal += Instance.getDistance(newNode.getId(), sites.get(index + 1).getId());
+            }else{
+                distanceTotal -= Instance.getDistance(node.getId(), hotelEnd.getId());
+                distanceTotal += Instance.getDistance(newNode.getId(), hotelEnd.getId());
+            }
+            scoreTotal -= node.getScore();
+            scoreTotal += newNode.getScore();
+            sites.set(index, newNode);
+            node.removeRoute(this);
+            newNode.addRoute(this);
+        }
+    }
+
     public Node getLast() {
         if(!sites.isEmpty()){
             return sites.get(sites.size() - 1);
