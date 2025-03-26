@@ -1,9 +1,6 @@
 package VRP.solution;
 
-import VRP.Instance;
-import VRP.Node;
-import VRP.NodeType;
-import VRP.Route;
+import VRP.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,31 +8,32 @@ import java.util.List;
 public abstract class Solution {
     protected List<Route> routes;
     protected List<Node> nodes;
-    protected List<Node> sitesTouristrique;
-    protected List<Node> hotels;
-    protected double score;
+    protected List<SiteNode> sites;
+    protected List<HotelNode> hotels;
+    protected int score;
 
     public Solution(){
         nodes = new ArrayList<>();
         routes = new ArrayList<>();
-        sitesTouristrique = new ArrayList<>();
+        sites = new ArrayList<>();
         hotels = new ArrayList<>();
         score = 0;
         for(int i = 0; i < Instance.getNbDestination(); i++){
-            Node node = null;
             if(i <= 1 + Instance.getNbHotelSupp()){
-                node = new Node(i, Instance.getScore(i), NodeType.HOTEL);
+                HotelNode node = new HotelNode(i, Instance.getScore(i));
                 hotels.add(node);
+                nodes.add(node);
             }else{
-                node = new Node(i, Instance.getScore(i), NodeType.SITE_TOURISTIQUE);
-                sitesTouristrique.add(node);
+                SiteNode node = new SiteNode(i, Instance.getScore(i));
+                sites.add(node);
+                nodes.add(node);
             }
-            nodes.add(node);
         }
         for (int i = 0; i < Instance.getJours(); i++){
-            routes.add(new Route(i, Instance.getDistanceMaxJour(i)));
+            routes.add(new Route(i, null, null, Instance.getDistanceMaxJour(i)));
         }
-        routes.get(0).addFirst(nodes.get(0));
+        routes.get(0).setHotelStart(hotels.get(0));
+        routes.get(routes.size()-1).setHotelEnd(hotels.get(1));
     }
 
     public void evaluate(){
@@ -53,11 +51,19 @@ public abstract class Solution {
         return nodes;
     }
 
-    public double getScore() {
+    public List<SiteNode> getSites() {
+        return sites;
+    }
+
+    public List<HotelNode> getHotels() {
+        return hotels;
+    }
+
+    public int getScore() {
         return score;
     }
 
-    public void setScore(double score) {
+    public void setScore(int score) {
         this.score = score;
     }
 

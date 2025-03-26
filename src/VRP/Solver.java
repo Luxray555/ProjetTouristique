@@ -73,6 +73,23 @@ public class Solver {
             if (Instance.readFile(parameters.get("INPUT"))) {
                 Solution s = solveConstruct();
                 if (s != null) {
+                    switch (parameters.get("METHOD")) {
+                        case "1":
+                            s.solveTS();
+                            break;
+                        case "2":
+                            s.solveVNS();
+                            break;
+                        case "3":
+                            s.solveLNS();
+                            break;
+                        case "4":
+                            s.solveILS();
+                            break;
+                        case "5":
+                            s.solveVND();
+                            break;
+                    }
                     long end = System.currentTimeMillis();
                     output(s, (end - start) / 1000.0);
                 }
