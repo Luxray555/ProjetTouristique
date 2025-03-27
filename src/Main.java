@@ -6,6 +6,7 @@ public class Main {
 
     public static void main(String[] args){
         //Lire tous les fichier d'un dossier
+        /*
         File folder = new File("data");
         File[] listOfFiles = folder.listFiles();
         for (File file : listOfFiles) {
@@ -22,5 +23,16 @@ public class Main {
                 System.out.println(file.getName() + " : Finished");
             }
         }
+        */
+        System.out.println("7 : Started");
+        String[] parameters = {
+                "INPUT=data/instance7.txt",
+                "CONSTRUCT=0",
+                "METHOD=0",
+                "OUTPUT=result/instance7.sol"
+        };
+        Solver solver = new Solver(parameters);
+        solver.solve();
+        System.out.println("7 : Finished");
     }
 }

@@ -47,11 +47,17 @@ public class Route {
     public void addLast(SiteNode node) {
         if (!sites.isEmpty()) {
             distanceTotal += Instance.getDistance(sites.get(sites.size() - 1).getId(), node.getId());
+            if(hotelEnd != null) {
+                distanceTotal += Instance.getDistance(node.getId(), hotelEnd.getId());
+                distanceTotal -= Instance.getDistance(sites.get(sites.size() - 1).getId(), hotelEnd.getId());
+            }
         } else {
             if(hotelEnd != null){
-                distanceTotal += Instance.getDistance(hotelStart.getId(), node.getId());
-                distanceTotal += Instance.getDistance(node.getId(), hotelEnd.getId());
-                distanceTotal -= Instance.getDistance(hotelStart.getId(), hotelEnd.getId());
+                distanceTotal += Instance.getDistance(hotelEnd.getId(), node.getId());
+                if(hotelStart != null){
+                    distanceTotal += Instance.getDistance(node.getId(), hotelStart.getId());
+                    distanceTotal -= Instance.getDistance(hotelStart.getId(), hotelEnd.getId());
+                }
             }
         }
         this.sites.add(node);
@@ -82,7 +88,7 @@ public class Route {
         }
     }
 
-    public Node getHotelStart() {
+    public HotelNode getHotelStart() {
         return hotelStart;
     }
 
@@ -99,7 +105,7 @@ public class Route {
         }
     }
 
-    public Node getHotelEnd() {
+    public HotelNode getHotelEnd() {
         return hotelEnd;
     }
 
@@ -138,6 +144,14 @@ public class Route {
             sites.set(index, newNode);
             node.removeRoute(this);
             newNode.addRoute(this);
+        }
+    }
+
+    public boolean checkDistanceLast(SiteNode node){
+        if(!sites.isEmpty()){
+            return distanceTotal + Instance.getDistance(sites.get(sites.size() - 1).getId(), node.getId()) + Instance.getDistance(node.getId(), hotelEnd.getId()) <= distanceMax;
+        }else{
+            return distanceTotal + Instance.getDistance(hotelStart.getId(), node.getId()) + Instance.getDistance(node.getId(), hotelEnd.getId()) <= distanceMax;
         }
     }
 

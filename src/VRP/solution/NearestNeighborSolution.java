@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NearestNeighborSolution extends Solution{
+
     public NearestNeighborSolution(){
         super();
     }
@@ -23,7 +24,7 @@ public class NearestNeighborSolution extends Solution{
             Route route = routes.get(i);
             Node current = route.getHotelStart();
             while(visited.size() < sites.size() && current != null){
-                Result next = nearestSite(current, route.getHotelEnd(), visited);
+                Result next = nearestSite(current, route, visited);
                 if(next.getNode() != null && route.getDistanceMax() > route.getDistanceTotal() + next.getDistance()){
                     route.addLast((SiteNode)next.getNode());
                     visited.add(next.getNode());
@@ -38,52 +39,46 @@ public class NearestNeighborSolution extends Solution{
     }
 
     private void constructHotels(){
-        for(int i = 0; i < routes.size() - 1; i++){
-            Route route = routes.get(i);
-            Node current = route.getHotelStart();
-            Result next = satisfiedHotel(current);
-            route.setHotelEnd((HotelNode)next.getNode());
-            if(routes.size() - 1 > i){
-                routes.get(i+1).setHotelStart((HotelNode)next.getNode());
-            }
-        }
+        this.recursiveHotels(routes.get(0));
     }
 
-    private Result satisfiedHotel(Node node){
-        Result result = new Result(null, 0);
-        for(Node hotel : hotels){
-            double dist = Instance.getDistance(node.getId(), hotel.getId());
-            double distanceLast = Instance.getDistance(hotel.getId(), hotels.get(1).getId());
-            if(dist > result.getDistance() && distanceLast < routes.get(routes.size() - 1).getDistanceMax()){
-                result.setDistance(dist);
-                result.setNode(hotel);
+    private boolean recursiveHotels(Route route){
+        List<HotelNode> orderedHotels = new ArrayList<>(this.hotels.stream().sorted((h1, h2) -> {
+            double dist1 = Instance.getDistance(route.getHotelStart().getId(), h1.getId());
+            double dist2 = Instance.getDistance(route.getHotelStart().getId(), h2.getId());
+            return Double.compare(dist2, dist1);
+        }).toList());
+        orderedHotels.remove(route.getHotelStart());
+        double mid = route.getDistanceMax() / 1.5;
+        for(Node hotel : orderedHotels){
+            double dist = Instance.getDistance(route.getHotelStart().getId(), hotel.getId());
+            if(dist <= route.getDistanceMax() && dist <= mid){
+                if(routes.size() - 1 > route.getId()){
+                    route.setHotelEnd((HotelNode)hotel);
+                    routes.get(route.getId() + 1).setHotelStart((HotelNode)hotel);
+                    boolean verif = recursiveHotels(routes.get(route.getId() + 1));
+                    if(verif){
+                        return true;
+                    }
+                }else if(hotel.getId() == hotels.get(1).getId()) return true;
+            }else{
+                if(routes.size() - 1 > route.getId()){
+                    routes.get(route.getId() + 1).setHotelStart(route.getHotelStart());
+                    route.setHotelEnd(route.getHotelStart());
+                }else{
+                    route.setHotelEnd(route.getHotelStart());
+                }
             }
         }
-        if (result.getNode() == null){
-            result = nearestHotel(node);
-        }
-        return result;
+        return false;
     }
 
-    private Result nearestHotel(Node node){
+    private Result nearestSite(Node node, Route route, List<Node> visited){
         Result result = new Result(null, Double.MAX_VALUE);
-        for(Node hotel : hotels){
-            double dist = Instance.getDistance(node.getId(), hotel.getId());
-            if(dist < result.getDistance()){
-                result.setDistance(dist);
-                result.setNode(hotel);
-            }
-        }
-        return result;
-    }
-
-    private Result nearestSite(Node node, Node EndHotel, List<Node> visited){
-        Result result = new Result(null, Double.MAX_VALUE);
-        for(Node site : sites){
+        for(SiteNode site : sites){
             if(!visited.contains(site)){
                 double dist = Instance.getDistance(node.getId(), site.getId());
-                double distanceLast = Instance.getDistance(site.getId(), EndHotel.getId());
-                if(dist < result.getDistance() && distanceLast < routes.get(routes.size() - 1).getDistanceMax()){
+                if(dist < result.getDistance() && route.checkDistanceLast(site)){
                     result.setDistance(dist);
                     result.setNode(site);
                 }

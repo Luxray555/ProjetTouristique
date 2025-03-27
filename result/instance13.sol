@@ -4,9 +4,9 @@ CONSTRUCT=0
 OUTPUT=result/instance13.sol
 METHOD=0
 Solution :
-	Jour 0 : Hotel0 -> Site30 -> Site29 -> Site33 -> Site20 -> Site34 -> Site10 -> Site9 -> Site12 -> Hotel3 | Score : 130.0 | Distance : 22.382133515917662 | DistanceMax : 23.4476
-	Jour 1 : Hotel3 -> Site18 -> Site37 -> Site14 -> Site8 -> Site38 -> Site32 -> Hotel4 | Score : 110.0 | Distance : 23.89608770656979 | DistanceMax : 24.8188
-	Jour 2 : Hotel4 -> Site15 -> Site16 -> Site36 -> Site35 -> Hotel5 | Score : 100.0 | Distance : 23.49955990707569 | DistanceMax : 25.244
-	Jour 3 : Hotel5 -> Site26 -> Site23 -> Hotel1 | Score : 90.0 | Distance : 13.868491398408645 | DistanceMax : 15.8031
-Score : 430
+	Jour 0 : Hotel0 -> Site30 -> Site29 -> Site33 -> Site38 -> Site32 -> Site35 -> Hotel3 | Score : 70.0 | Distance : 21.805218889967456 | DistanceMax : 23.4476
+	Jour 1 : Hotel3 -> Site18 -> Site37 -> Site36 -> Hotel4 | Score : 70.0 | Distance : 20.130353575233134 | DistanceMax : 24.8188
+	Jour 2 : Hotel4 -> Site15 -> Site31 -> Site28 -> Site11 -> Hotel5 | Score : 110.0 | Distance : 23.79522164426351 | DistanceMax : 25.244
+	Jour 3 : Hotel5 -> Site10 -> Site20 -> Site34 -> Site9 -> Site12 -> Site8 -> Site19 -> Hotel5 | Score : 150.0 | Distance : 14.287191289677907 | DistanceMax : 15.8031
+Score : 400
 Time: 0.001
