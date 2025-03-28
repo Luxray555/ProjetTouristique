@@ -18,6 +18,7 @@ public class SiteNode extends Node{
         StringBuilder sb = new StringBuilder();
         sb.append("Site");
         sb.append(getId());
+        sb.append("(" + getScore() + ")");
         return sb.toString();
     }
 }

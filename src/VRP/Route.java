@@ -28,8 +28,13 @@ public class Route {
     }
 
     public void addFirst(SiteNode node) {
+        if(node == null) return;
         if (!sites.isEmpty()) {
             distanceTotal += Instance.getDistance(node.getId(), sites.get(0).getId());
+            if(hotelStart != null) {
+                distanceTotal += Instance.getDistance(hotelStart.getId(), node.getId());
+                distanceTotal -= Instance.getDistance(hotelStart.getId(), sites.get(0).getId());
+            }
         } else {
             if(hotelStart != null){
                 distanceTotal += Instance.getDistance(hotelStart.getId(), node.getId());
@@ -45,6 +50,7 @@ public class Route {
     }
 
     public void addLast(SiteNode node) {
+        if(node == null) return;
         if (!sites.isEmpty()) {
             distanceTotal += Instance.getDistance(sites.get(sites.size() - 1).getId(), node.getId());
             if(hotelEnd != null) {

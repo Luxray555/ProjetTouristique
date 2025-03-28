@@ -22,5 +22,17 @@ public class Main {
                 System.out.println(file.getName() + " : Finished");
             }
         }
+        //Lire un seul fichier
+        /*
+        String[] parameters = {
+                "INPUT=data/instance10.txt",
+                "CONSTRUCT=0",
+                "METHOD=0",
+                "OUTPUT=result/instance10.sol"
+        };
+        Solver solver = new Solver(parameters);
+        solver.solve();
+        */
     }
+
 }

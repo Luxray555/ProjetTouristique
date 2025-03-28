@@ -1,6 +1,7 @@
 package VRP;
 
 import VRP.solution.CWSolution;
+import VRP.solution.NearestNeighborScoreSolution;
 import VRP.solution.NearestNeighborSolution;
 import VRP.solution.Solution;
 
@@ -30,7 +31,7 @@ public class Solver {
         Solution s;
         switch (construct) {
             case "0":
-                s = new NearestNeighborSolution();
+                s = new NearestNeighborScoreSolution();
                 s.construct();
                 return s;
             case "1":

@@ -18,7 +18,7 @@ public class NearestNeighborSolution extends Solution{
         this.evaluate();
     }
 
-    private void constructSites(){
+    protected void constructSites(){
         List<Node> visited = new ArrayList<>();
         for(int i = 0; i < routes.size(); i++){
             Route route = routes.get(i);
@@ -38,11 +38,11 @@ public class NearestNeighborSolution extends Solution{
         }
     }
 
-    private void constructHotels(){
+    protected void constructHotels(){
         this.recursiveHotels(routes.get(0));
     }
 
-    private boolean recursiveHotels(Route route){
+    protected boolean recursiveHotels(Route route){
         if (route.getId() == routes.size() - 1) {
             if(route.getDistanceTotal() <= route.getDistanceMax()){
                 return true;
@@ -77,7 +77,7 @@ public class NearestNeighborSolution extends Solution{
         return false;
     }
 
-    private Result nearestSite(Node node, Route route, List<Node> visited){
+    protected Result nearestSite(Node node, Route route, List<Node> visited){
         Result result = new Result(null, Double.MAX_VALUE);
         for(SiteNode site : sites){
             if(!visited.contains(site)){
@@ -91,7 +91,7 @@ public class NearestNeighborSolution extends Solution{
         return result;
     }
 
-    private Result nearestHotel(HotelNode node, List<HotelNode> hotels){
+    protected Result nearestHotel(HotelNode node, List<HotelNode> hotels){
         Result result = new Result(null, Double.MAX_VALUE);
         for(HotelNode hotel : hotels){
             double dist = Instance.getDistance(node.getId(), hotel.getId());

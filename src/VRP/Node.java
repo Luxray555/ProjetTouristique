@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Node {
-    private int id;
-    private List<Route> routes;
-    private double score;
+    protected int id;
+    protected List<Route> routes;
+    protected double score;
 
     public Node(int id, double score) {
         this.id = id;
