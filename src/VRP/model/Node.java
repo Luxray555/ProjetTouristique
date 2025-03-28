@@ -1,4 +1,4 @@
-package VRP;
+package VRP.model;
 
 import java.util.ArrayList;
 import java.util.List;

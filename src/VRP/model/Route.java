@@ -1,4 +1,6 @@
-package VRP;
+package VRP.model;
+
+import VRP.Instance;
 
 import java.util.ArrayList;
 import java.util.List;

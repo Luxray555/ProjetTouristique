@@ -1,4 +1,4 @@
-package VRP;
+package VRP.model;
 
 public class SiteNode extends Node{
 

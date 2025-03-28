@@ -1,4 +1,4 @@
-package VRP;
+package VRP.model;
 
 public class HotelNode extends Node{
     public HotelNode(int id, double score) {

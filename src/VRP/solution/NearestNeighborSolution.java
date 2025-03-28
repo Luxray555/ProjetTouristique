@@ -1,6 +1,10 @@
 package VRP.solution;
 
 import VRP.*;
+import VRP.model.HotelNode;
+import VRP.model.Node;
+import VRP.model.Route;
+import VRP.model.SiteNode;
 
 import java.util.ArrayList;
 import java.util.List;

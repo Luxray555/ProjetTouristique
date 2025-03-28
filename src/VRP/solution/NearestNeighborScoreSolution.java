@@ -1,9 +1,9 @@
 package VRP.solution;
 
 import VRP.Instance;
-import VRP.Node;
-import VRP.Route;
-import VRP.SiteNode;
+import VRP.model.Node;
+import VRP.model.Route;
+import VRP.model.SiteNode;
 
 import java.util.List;
 
