@@ -43,31 +43,36 @@ public class NearestNeighborSolution extends Solution{
     }
 
     private boolean recursiveHotels(Route route){
+        if (route.getId() == routes.size() - 1) {
+            if(route.getDistanceTotal() < route.getDistanceMax()){
+                return true;
+            }else{
+                return false;
+            }
+        }
         List<HotelNode> orderedHotels = new ArrayList<>(this.hotels.stream().sorted((h1, h2) -> {
             double dist1 = Instance.getDistance(route.getHotelStart().getId(), h1.getId());
             double dist2 = Instance.getDistance(route.getHotelStart().getId(), h2.getId());
-            return Double.compare(dist2, dist1);
+            return Double.compare(dist1, dist2);
         }).toList());
         orderedHotels.remove(route.getHotelStart());
-        double mid = route.getDistanceMax() / 1.5;
-        for(Node hotel : orderedHotels){
-            double dist = Instance.getDistance(route.getHotelStart().getId(), hotel.getId());
-            if(dist <= route.getDistanceMax() && dist <= mid){
-                if(routes.size() - 1 > route.getId()){
-                    route.setHotelEnd((HotelNode)hotel);
-                    routes.get(route.getId() + 1).setHotelStart((HotelNode)hotel);
+        orderedHotels.add(route.getHotelStart());
+        while (!orderedHotels.isEmpty()) {
+            Result result = nearestHotel(route.getHotelStart(), orderedHotels);
+            if (result.getDistance() <= route.getDistanceMax()) {
+                if (routes.size() - 1 > route.getId()) {
+                    route.setHotelEnd((HotelNode) result.getNode());
+                    routes.get(route.getId() + 1).setHotelStart((HotelNode) result.getNode());
                     boolean verif = recursiveHotels(routes.get(route.getId() + 1));
-                    if(verif){
+                    if (verif) {
+                        System.out.println("True : " + route.getId());
                         return true;
+                    } else {
+                        orderedHotels.remove(result.getNode());
                     }
-                }else if(hotel.getId() == hotels.get(1).getId()) return true;
-            }else{
-                if(routes.size() - 1 > route.getId()){
-                    routes.get(route.getId() + 1).setHotelStart(route.getHotelStart());
-                    route.setHotelEnd(route.getHotelStart());
-                }else{
-                    route.setHotelEnd(route.getHotelStart());
                 }
+            }else{
+                orderedHotels.remove(result.getNode());
             }
         }
         return false;
@@ -82,6 +87,18 @@ public class NearestNeighborSolution extends Solution{
                     result.setDistance(dist);
                     result.setNode(site);
                 }
+            }
+        }
+        return result;
+    }
+
+    private Result nearestHotel(HotelNode node, List<HotelNode> hotels){
+        Result result = new Result(null, Double.MAX_VALUE);
+        for(HotelNode hotel : hotels){
+            double dist = Instance.getDistance(node.getId(), hotel.getId());
+            if(dist < result.getDistance()){
+                result.setDistance(dist);
+                result.setNode(hotel);
             }
         }
         return result;
