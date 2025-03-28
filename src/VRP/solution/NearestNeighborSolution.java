@@ -44,7 +44,7 @@ public class NearestNeighborSolution extends Solution{
 
     private boolean recursiveHotels(Route route){
         if (route.getId() == routes.size() - 1) {
-            if(route.getDistanceTotal() < route.getDistanceMax()){
+            if(route.getDistanceTotal() <= route.getDistanceMax()){
                 return true;
             }else{
                 return false;
@@ -56,7 +56,6 @@ public class NearestNeighborSolution extends Solution{
             return Double.compare(dist1, dist2);
         }).toList());
         orderedHotels.remove(route.getHotelStart());
-        orderedHotels.add(route.getHotelStart());
         while (!orderedHotels.isEmpty()) {
             Result result = nearestHotel(route.getHotelStart(), orderedHotels);
             if (result.getDistance() <= route.getDistanceMax()) {
@@ -100,6 +99,9 @@ public class NearestNeighborSolution extends Solution{
                 result.setDistance(dist);
                 result.setNode(hotel);
             }
+        }
+        if(result.getNode() == null){
+            result.setNode(node);
         }
         return result;
     }

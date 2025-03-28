@@ -9,4 +9,4 @@ Solution :
 	Jour 2 : Hotel3 ->  -> Hotel4 | Score : 0.0 | Distance : 9.51262319236918 | DistanceMax : 12.3892
 	Jour 3 : Hotel4 ->  -> Hotel1 | Score : 0.0 | Distance : 5.229196879062787 | DistanceMax : 6.42377
 Score : 77
-Time: 0.003
+Time: 0.002
