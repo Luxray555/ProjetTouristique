@@ -9,7 +9,7 @@ import VRP.model.SiteNode;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Solution {
+public class Solution {
     protected List<Route> routes;
     protected List<Node> nodes;
     protected List<SiteNode> sites;
@@ -63,6 +63,10 @@ public abstract class Solution {
         return hotels;
     }
 
+    public void setRoutes(List<Route> routes) {
+        this.routes = routes;
+    }
+
     public int getScore() {
         return score;
     }
@@ -71,7 +75,9 @@ public abstract class Solution {
         this.score = score;
     }
 
-    public abstract void construct();
+    public void construct(){
+
+    }
 
     public void solveILS(){
 
@@ -98,5 +104,20 @@ public abstract class Solution {
         return "Solution :" +
                 routes.stream().map(Route::toString).reduce("", (a, b) -> a + "\n\t" + b) + "\n" +
                 "Score : " + score;
+    }
+
+    public Solution copy(){
+        Solution solution = new Solution();
+        solution.setScore(score);
+        List<Route> newRoutes = new ArrayList<>();
+        for(Route route : routes){
+            Route newRoute = new Route(route.getId(), route.getHotelStart(), route.getHotelEnd(), route.getDistanceMax());
+            for(SiteNode site : route.getSites()){
+                newRoute.addLast(site);
+            }
+            newRoutes.add(newRoute);
+        }
+        solution.setRoutes(newRoutes);
+        return solution;
     }
 }

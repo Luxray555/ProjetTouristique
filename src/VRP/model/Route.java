@@ -157,9 +157,9 @@ public class Route {
 
     public boolean checkDistanceLast(SiteNode node){
         if(!sites.isEmpty()){
-            return distanceTotal + Instance.getDistance(sites.get(sites.size() - 1).getId(), node.getId()) + Instance.getDistance(node.getId(), hotelEnd.getId()) <= distanceMax;
+            return distanceTotal - Instance.getDistance(sites.get(sites.size() - 1).getId(), hotelEnd.getId()) + Instance.getDistance(sites.get(sites.size() - 1).getId(), node.getId()) + Instance.getDistance(node.getId(), hotelEnd.getId()) <= distanceMax;
         }else{
-            return distanceTotal + Instance.getDistance(hotelStart.getId(), node.getId()) + Instance.getDistance(node.getId(), hotelEnd.getId()) <= distanceMax;
+            return Instance.getDistance(hotelStart.getId(), node.getId()) + Instance.getDistance(node.getId(), hotelEnd.getId()) <= distanceMax;
         }
     }
 
