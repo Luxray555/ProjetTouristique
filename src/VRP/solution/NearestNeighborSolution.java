@@ -43,16 +43,17 @@ public class NearestNeighborSolution extends Solution{
     }
 
     protected void constructHotels(){
-        this.recursiveHotels(routes.get(0));
+        List<Route> routesConstruct = new ArrayList<>();
+        for(Route route : this.routes){
+            routesConstruct.add(new Route(route.getId(), route.getHotelStart(), route.getHotelEnd(), route.getDistanceMax()));
+        }
+        this.recursiveHotels(routesConstruct.get(0), routesConstruct);
+        this.routes = routesConstruct;
     }
 
-    protected boolean recursiveHotels(Route route){
-        if (route.getId() == routes.size() - 1) {
-            if(route.getDistanceTotal() <= route.getDistanceMax()){
-                return true;
-            }else{
-                return false;
-            }
+    protected boolean recursiveHotels(Route route, List<Route> routesConstruct){
+        if (route.getId() == routesConstruct.size() - 1) {
+            return route.getDistanceTotal() <= route.getDistanceMax();
         }
         List<HotelNode> orderedHotels = new ArrayList<>(this.hotels.stream().sorted((h1, h2) -> {
             double dist1 = Instance.getDistance(route.getHotelStart().getId(), h1.getId());
@@ -60,15 +61,15 @@ public class NearestNeighborSolution extends Solution{
             return Double.compare(dist1, dist2);
         }).toList());
         orderedHotels.remove(route.getHotelStart());
+        orderedHotels.add(route.getHotelStart());
         while (!orderedHotels.isEmpty()) {
             Result result = nearestHotel(route.getHotelStart(), orderedHotels);
             if (result.getDistance() <= route.getDistanceMax()) {
-                if (routes.size() - 1 > route.getId()) {
+                if (routesConstruct.size() - 1 > route.getId()) {
                     route.setHotelEnd((HotelNode) result.getNode());
-                    routes.get(route.getId() + 1).setHotelStart((HotelNode) result.getNode());
-                    boolean verif = recursiveHotels(routes.get(route.getId() + 1));
+                    routesConstruct.get(route.getId() + 1).setHotelStart((HotelNode) result.getNode());
+                    boolean verif = recursiveHotels(routesConstruct.get(route.getId() + 1), routesConstruct);
                     if (verif) {
-                        System.out.println("True : " + route.getId());
                         return true;
                     } else {
                         orderedHotels.remove(result.getNode());

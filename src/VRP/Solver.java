@@ -31,7 +31,7 @@ public class Solver {
         Solution s;
         switch (construct) {
             case "0":
-                s = new NearestNeighborScoreSolution();
+                s = new NearestNeighborSolution();
                 s.construct();
                 return s;
             case "1":
