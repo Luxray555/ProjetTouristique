@@ -16,8 +16,25 @@ public class NearestNeighborPotentialImproveSolution extends NearestNeighborSolu
     }
 
     @Override
+    public void construct() {
+        this.constructHotels();
+        this.constructSites();
+        for (Node hotel : hotels) {
+            hotel.removeAllRoutes();
+        }
+        for (Route route : this.routes) {
+            route.getHotelStart().addRoute(route);
+            route.getHotelEnd().addRoute(route);
+        }
+        this.evaluate();
+    }
+
+    @Override
     protected void constructSites() {
-        List<Route> routesConstruct = new ArrayList<>(this.routes);
+        List<Route> routesConstruct = new ArrayList<>();
+        for (Route route : this.routes) {
+            routesConstruct.add(new Route(route.getId(), route.getHotelStart(), route.getHotelEnd(), route.getDistanceMax()));
+        }
         List<List<Route>> solutions = new ArrayList<>();
         recursiveSites(routesConstruct.get(0), routesConstruct, solutions, new ArrayList<>(), routesConstruct.get(0).getHotelStart());
         solutions.sort((o1, o2) -> {
@@ -49,6 +66,15 @@ public class NearestNeighborPotentialImproveSolution extends NearestNeighborSolu
             return Double.compare(sumDistance(o2), sumDistance(o1));
         });
         this.routes = solutions.isEmpty() ? routesConstruct : solutions.get(0);
+        for (Node hotel : hotels) {
+            System.out.println("Avant suppression, routes de " + hotel + " : " + hotel.getRoutes().size());
+            hotel.removeAllRoutes();
+            System.out.println("Après suppression, routes de " + hotel + " : " + hotel.getRoutes().size());
+        }
+        for (Route route : this.routes) {
+            route.getHotelStart().addRoute(route);
+            route.getHotelEnd().addRoute(route);
+        }
     }
 
     protected void recursiveSites(Route currentRoute, List<Route> routesConstruct,
@@ -56,20 +82,16 @@ public class NearestNeighborPotentialImproveSolution extends NearestNeighborSolu
         Result result = nearestSite(lastSite, currentRoute, visitedSites);
         SiteNode site = (SiteNode) result.getNode();
 
-        // Case 1: Try adding the site if possible
         if (site != null && currentRoute.checkDistanceLast(site) && !visitedSites.contains(site)) {
             currentRoute.addLast(site);
             visitedSites.add(site);
 
-            // Continue with same route
             recursiveSites(currentRoute, routesConstruct, solutions, visitedSites, site);
 
-            // Backtrack
             currentRoute.removeLast();
             visitedSites.remove(site);
         }
 
-        // Case 2: Move to next route (even if we could add more to current route)
         if (currentRoute.getId() < routesConstruct.size() - 1) {
             Route nextRoute = routesConstruct.get(currentRoute.getId() + 1);
             recursiveSites(nextRoute, routesConstruct, solutions, visitedSites, nextRoute.getHotelStart());

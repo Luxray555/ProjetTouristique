@@ -1,6 +1,7 @@
 package VRP;
 
 import VRP.Movement.Exchange;
+import VRP.checker.Checker;
 import VRP.solution.NearestNeighborPotentialImproveSolution;
 import VRP.solution.NearestNeighborPotentialSolution;
 import VRP.solution.NearestNeighborScoreSolution;
@@ -84,6 +85,7 @@ public class Solver {
             long start = System.currentTimeMillis();
             if (Instance.readFile(parameters.get("INPUT"))) {
                 Solution s = solveConstruct();
+                System.out.println(Checker.checkSolution(s));
                 if (s != null) {
                     switch (parameters.get("METHOD")) {
                         case "1":

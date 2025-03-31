@@ -36,7 +36,6 @@ public class NearestNeighborSolution extends Solution{
                 }else{
                     current = null;
                 }
-
             }
 
         }
@@ -48,6 +47,13 @@ public class NearestNeighborSolution extends Solution{
         recursiveHotels(routesConstruct.get(0), routesConstruct, solutions);
 
         this.routes = solutions.isEmpty() ? routesConstruct : solutions.get(0);
+        for(HotelNode hotel : hotels){
+            hotel.removeAllRoutes();
+        }
+        for(Route route : this.routes){
+            route.getHotelStart().addRoute(route);
+            route.getHotelEnd().addRoute(route);
+        }
     }
 
 
@@ -71,12 +77,10 @@ public class NearestNeighborSolution extends Solution{
                     route.setHotelEnd((HotelNode) result.getNode());
                     routesConstruct.get(route.getId() + 1).setHotelStart((HotelNode) result.getNode());
 
-                    // Appel récursif pour explorer toutes les possibilités
                     recursiveHotels(routesConstruct.get(route.getId() + 1), routesConstruct, solutions);
 
-                    // On remet l'état précédent pour explorer d'autres options
-                    route.setHotelEnd(null);
-                    routesConstruct.get(route.getId() + 1).setHotelStart(null);
+                    route.removeHotelEnd();
+                    routesConstruct.get(route.getId() + 1).removeHotelStart();
                 }
             }
             orderedHotels.remove(result.getNode());

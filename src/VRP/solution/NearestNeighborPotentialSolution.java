@@ -29,6 +29,14 @@ public class NearestNeighborPotentialSolution extends NearestNeighborSolution{
             return Double.compare(sumDistance(o1), sumDistance(o2)); // Otherwise, sort by distance (ascending)
         });
         this.routes = solutions.isEmpty() ? routesConstruct : solutions.get(0);
+
+        for(HotelNode hotel : hotels){
+            hotel.removeAllRoutes();
+        }
+        for(Route route : this.routes){
+            route.getHotelStart().addRoute(route);
+            route.getHotelEnd().addRoute(route);
+        }
     }
 
     private int potentielHotels(List<Route> routes){

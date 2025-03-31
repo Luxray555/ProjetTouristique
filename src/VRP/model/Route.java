@@ -11,7 +11,7 @@ public class Route {
     private HotelNode hotelStart;
     private HotelNode hotelEnd;
     private List<SiteNode> sites;
-    private double scoreTotal;
+    private int scoreTotal;
     private double distanceTotal;
     private double distanceMax;
 
@@ -169,6 +169,7 @@ public class Route {
                 distanceTotal = Instance.getDistance(this.hotelStart.getId(), this.hotelEnd.getId());
             }
         }
+        hotelStart.addRoute(this);
     }
 
     public HotelNode getHotelEnd() {
@@ -185,6 +186,30 @@ public class Route {
             if(this.hotelStart != null && this.hotelEnd != null){
                 distanceTotal = Instance.getDistance(this.hotelStart.getId(), this.hotelEnd.getId());
             }
+        }
+        if(this.hotelEnd != null){
+            this.hotelEnd.removeRoute(this);
+        }
+        hotelEnd.addRoute(this);
+    }
+
+    public void removeHotelEnd(){
+        if(hotelEnd != null){
+            if(!sites.isEmpty()){
+                distanceTotal -= Instance.getDistance(sites.get(sites.size() - 1).getId(), hotelEnd.getId());
+            }
+            hotelEnd.removeRoute(this);
+            hotelEnd = null;
+        }
+    }
+
+    public void removeHotelStart(){
+        if(hotelStart != null){
+            if(!sites.isEmpty()){
+                distanceTotal -= Instance.getDistance(hotelStart.getId(), sites.get(0).getId());
+            }
+            hotelStart.removeRoute(this);
+            hotelStart = null;
         }
     }
 
@@ -236,7 +261,7 @@ public class Route {
         return sites;
     }
 
-    public double getScoreTotal() {
+    public int getScoreTotal() {
         return scoreTotal;
     }
 

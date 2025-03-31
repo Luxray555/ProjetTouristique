@@ -46,6 +46,10 @@ public abstract class Node {
         this.routes.remove(route);
     }
 
+    public void removeAllRoutes(){
+        routes.clear();
+    }
+
     public int getScore() {
         return score;
     }

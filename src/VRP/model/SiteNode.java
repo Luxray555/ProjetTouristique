@@ -14,16 +14,12 @@ public class SiteNode extends Node{
         }
     }
 
-    public Node getNext(){
-        if(!routes.isEmpty()){
+    public Node getNext() {
+        if (!routes.isEmpty()) {
             return getRoutes().get(0).getNext(this);
-        }else{
+        } else {
             return null;
         }
-    }
-
-    public void removeAllRoutes(){
-        routes.clear();
     }
 
     public String toString() {
