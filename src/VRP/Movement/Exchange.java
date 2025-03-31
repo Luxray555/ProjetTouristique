@@ -7,6 +7,7 @@ import VRP.solution.Solution;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Exchange implements Movement {
 
@@ -91,6 +92,7 @@ public class Exchange implements Movement {
     private void apply(Solution s, int i, int j) {
         s.setScore(evaluate(s, i, j));
 
+
         SiteNode nodeI = s.getSites().get(i);
         SiteNode nodeJ = s.getSites().get(j);
 
@@ -133,7 +135,7 @@ public class Exchange implements Movement {
         }
         if (max > s.getScore()) {
             apply(s, bestPair.getI(), bestPair.getJ());
-            System.out.println("Échange effectué entre les noeuds " + bestPair.getI() + " et " + bestPair.getJ());
+            System.out.println("Échange effectué entre les noeuds " + (bestPair.getI()+Instance.getNbHotel()) + " et " + (bestPair.getJ() + Instance.getNbHotel()));
             return true;
         }
 

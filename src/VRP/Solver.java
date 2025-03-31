@@ -1,6 +1,7 @@
 package VRP;
 
 import VRP.Movement.Exchange;
+import VRP.solution.NearestNeighborPotentialImproveSolution;
 import VRP.solution.NearestNeighborPotentialSolution;
 import VRP.solution.NearestNeighborScoreSolution;
 import VRP.solution.NearestNeighborSolution;
@@ -42,6 +43,10 @@ public class Solver {
                 return s;
             case "2":
                 s = new NearestNeighborPotentialSolution();
+                s.construct();
+                return s;
+            case "3":
+                s = new NearestNeighborPotentialImproveSolution();
                 s.construct();
                 return s;
             default:

@@ -22,6 +22,10 @@ public class SiteNode extends Node{
         }
     }
 
+    public void removeAllRoutes(){
+        routes.clear();
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Site");
