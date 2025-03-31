@@ -1,5 +1,6 @@
 package VRP;
 
+import VRP.Movement.Exchange;
 import VRP.solution.NearestNeighborScoreSolution;
 import VRP.solution.NearestNeighborSolution;
 import VRP.solution.Solution;

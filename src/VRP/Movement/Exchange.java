@@ -1,11 +1,8 @@
 package VRP.Movement;
 
 import VRP.*;
+import VRP.model.*;
 import VRP.solution.Solution;
-import VRP.model.Node;
-import VRP.model.Route;
-import VRP.model.SiteNode;
-import VRP.model.HotelNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,110 +11,116 @@ import java.util.List;
 public class Exchange implements Movement {
 
     boolean check(Solution s, int i, int j) {
-        SiteNode nodeI = (SiteNode) s.getNodes().get(i);
-        SiteNode nodeJ = (SiteNode) s.getNodes().get(j);
+        SiteNode nodeI = s.getSites().get(i);
+        SiteNode nodeJ = s.getSites().get(j);
 
         Route routeI = nodeI.getRoute(0);
         Route routeJ = nodeJ.getRoute(0);
 
-        // Calcul des distances I
-        double originalDistanceI = routeI.getDistanceTotal();
-        double distanceBeforeSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getId()) +
-                Instance.getDistance(nodeI.getId(), nodeI.getNext().getId());
-        double distanceAfterSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeJ.getId()) +
-                Instance.getDistance(nodeJ.getId(), nodeI.getNext().getId());
+        Node previousI = nodeI.getPrevious();
+        Node nextI = nodeI.getNext();
 
-        // Calcul des distances J
-        double originalDistanceJ = routeJ.getDistanceTotal();
-        double distanceBeforeSwapJ = Instance.getDistance(nodeJ.getPrevious().getId(), nodeJ.getId()) +
-                Instance.getDistance(nodeJ.getId(), nodeJ.getNext().getId());
-        double distanceAfterSwapJ = Instance.getDistance(nodeJ.getPrevious().getId(), nodeI.getId()) +
-                Instance.getDistance(nodeI.getId(), nodeJ.getNext().getId());
+        double distanceBeforeSwapI = 0.0;
 
-        // Vérifie si les nouvelles distances respectent la capacité maximale de la route
-        return (originalDistanceI - distanceBeforeSwapI + distanceAfterSwapI <= routeI.getDistanceMax()) &&
-                (originalDistanceJ - distanceBeforeSwapJ + distanceAfterSwapJ <= routeJ.getDistanceMax());
+        double distanceAfterSwapI = 0.0;
+
+        double distanceBeforeSwapJ = 0.0;
+
+        double distanceAfterSwapJ = 0.0;
+
+        if(routeI != null && routeJ != null){
+            distanceBeforeSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getId()) +
+                    Instance.getDistance(nodeI.getId(), nodeI.getNext().getId());
+            distanceAfterSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeJ.getId()) +
+                    Instance.getDistance(nodeJ.getId(), nodeI.getNext().getId());
+            distanceBeforeSwapJ = Instance.getDistance(nodeJ.getPrevious().getId(), nodeJ.getId()) +
+                    Instance.getDistance(nodeJ.getId(), nodeJ.getNext().getId());
+            distanceAfterSwapJ = Instance.getDistance(nodeJ.getPrevious().getId(), nodeI.getId()) +
+                    Instance.getDistance(nodeI.getId(), nodeJ.getNext().getId());
+
+            return (routeI.getDistanceTotal() - distanceBeforeSwapI + distanceAfterSwapI <= routeI.getDistanceMax()) &&
+                    (routeJ.getDistanceTotal() - distanceBeforeSwapJ + distanceAfterSwapJ <= routeJ.getDistanceMax());
+        }else if(routeI == null && routeJ != null){
+            distanceBeforeSwapJ = Instance.getDistance(nodeJ.getPrevious().getId(), nodeJ.getId()) +
+                    Instance.getDistance(nodeJ.getId(), nodeJ.getNext().getId());
+            distanceAfterSwapJ = Instance.getDistance(nodeJ.getPrevious().getId(), nodeI.getId()) +
+                    Instance.getDistance(nodeI.getId(), nodeJ.getNext().getId());
+            return (routeJ.getDistanceTotal() - distanceBeforeSwapJ + distanceAfterSwapJ <= routeJ.getDistanceMax());
+        }else if(routeI != null){
+            distanceBeforeSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getId()) +
+                    Instance.getDistance(nodeI.getId(), nodeI.getNext().getId());
+            distanceAfterSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeJ.getId()) +
+                    Instance.getDistance(nodeJ.getId(), nodeI.getNext().getId());
+
+            return (routeI.getDistanceTotal() - distanceBeforeSwapI + distanceAfterSwapI <= routeI.getDistanceMax());
+        }else{
+            return false;
+        }
     }
 
 
-    public double evaluate(Solution s, int i, int j) {
-        SiteNode siteI = (SiteNode) s.getNodes().get(i);
-        SiteNode siteJ = (SiteNode) s.getNodes().get(j);
+    public int evaluate(Solution s, int i, int j) {
+        SiteNode siteI = s.getSites().get(i);
+        SiteNode siteJ = s.getSites().get(j);
 
-        //double distPlus = 0;
-        //double distMoins = 0;
-        double nvScore = 0;
-
-        /*
-        distMoins += Instance.getDistance(siteI.getPrevious().getId(), siteI.getId()) +
-                Instance.getDistance(siteJ.getNext().getId(), siteJ.getId());
-        distPlus += Instance.getDistance(siteI.getPrevious().getId(), siteJ.getId()) +
-                Instance.getDistance(siteJ.getPrevious().getId(), siteI.getId());
-
-        distMoins += Instance.getDistance(siteI.getNext().getId(), siteI.getId()) +
-                Instance.getDistance(siteJ.getPrevious().getId(), siteJ.getId());
-        distPlus += Instance.getDistance(siteI.getNext().getId(), siteJ.getId()) +
-                Instance.getDistance(siteJ.getNext().getId(), siteI.getId());
-        */
-
-        if (siteI.getRoutes().get(0) == null) {
-            nvScore = s.getScore() - siteJ.getScore() + siteI.getScore();
-        } else if (siteJ.getRoutes().get(0) == null) {
-            nvScore = s.getScore() - siteI.getScore() + siteJ.getScore();
+        if (siteI.getRoutes().isEmpty()) {
+            return s.getScore() - siteJ.getScore() + siteI.getScore();
+        } else if (siteJ.getRoutes().isEmpty()) {
+            return s.getScore() - siteI.getScore() + siteJ.getScore();
             }
         else {
-            nvScore = s.getScore(); }
+            return s.getScore();
+        }
 
-        return nvScore;
     }
 
-    void apply(Solution s, int i, int j) {
-        s.setScore((int) (evaluate(s, i, j)));
+    private void apply(Solution s, int i, int j) {
+        s.setScore(evaluate(s, i, j));
 
-        SiteNode siteI = (SiteNode) s.getNodes().get(i);
-        SiteNode siteJ = (SiteNode) s.getNodes().get(j);
-        Route routeI = siteI.getRoutes().get(0);
-        Route routeJ = siteJ.getRoutes().get(0);
+        SiteNode nodeI = s.getSites().get(i);
+        SiteNode nodeJ = s.getSites().get(j);
 
-        // Échange des noeuds dans le tableau
-        Node tmp = s.getNodes().get(i);
-        s.getNodes().set(i, s.getNodes().get(j));
-        s.getNodes().set(j, tmp);
+        Route routeI = nodeI.getRoute(0);
+        Route routeJ = nodeJ.getRoute(0);
 
-        // Mise à jour des indices et des scores des noeuds
-        s.getNodes().get(i).setId(i);
-        s.getNodes().get(j).setId(j);
+        int indexI = -1;
+        int indexJ = -1;
 
-        // Mise à jour des scores des noeuds échangés
-        double tmpScore = s.getNodes().get(i).getScore();
-        s.getNodes().get(i).setScore(s.getNodes().get(j).getScore());
-        s.getNodes().get(j).setScore(tmpScore);
+        if(routeI != null){
+            indexI = routeI.removeSite(nodeI);
+        }
+        if(routeJ != null){
+            indexJ = routeJ.removeSite(nodeJ);
+        }
+        if(indexI != -1){
+            routeI.addSite(nodeJ, indexI);
+        }
+        if (indexJ != -1){
+            routeJ.addSite(nodeI, indexJ);
+        }
     }
 
     @Override
     public boolean applyBestImprovement(Solution s) {
         double max = Double.MIN_VALUE;  // On commence avec la plus petite valeur possible pour chercher un maximum
-        int mini = -1;
-        int minj = -1;
-
+        Pair bestPair = new Pair(-1, -1);
         // On teste tous les échanges possibles entre les sites
-        for (int i = 0; i < s.getNodes().size(); i++) {
-            for (int j = i + 1; j < s.getNodes().size(); j++) {
+        for (int i = 0; i < s.getSites().size(); i++) {
+            for (int j = i + 1; j < s.getSites().size(); j++) {
                 if (check(s, i, j)) {
                     double eval = evaluate(s, i, j);
-
                     if (eval > max) {  // Si l'évaluation est meilleure
                         max = eval;
-                        mini = i;
-                        minj = j;
+                        bestPair.setI(i);
+                        bestPair.setJ(j);
                     }
                 }
             }
         }
 
         if (max > s.getScore()) {
-            apply(s, mini, minj);
-            System.out.println("Échange effectué entre les noeuds " + mini + " et " + minj);
+            apply(s, bestPair.getI(), bestPair.getJ());
+            System.out.println("Échange effectué entre les noeuds " + bestPair.getI() + " et " + bestPair.getJ());
             return true;  // Un échange améliorant a été effectué
         }
 
@@ -151,23 +154,5 @@ public class Exchange implements Movement {
         }
 
         return false; // Si aucun échange n'est améliorant
-    }
-
-    // Classe interne pour représenter une paire de noeuds
-    private static class Pair {
-        private int i, j;
-
-        public Pair(int i, int j) {
-            this.i = i;
-            this.j = j;
-        }
-
-        public int getI() {
-            return i;
-        }
-
-        public int getJ() {
-            return j;
-        }
     }
 }

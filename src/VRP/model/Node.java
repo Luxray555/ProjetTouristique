@@ -6,9 +6,9 @@ import java.util.List;
 public abstract class Node {
     protected int id;
     protected List<Route> routes;
-    protected double score;
+    protected int score;
 
-    public Node(int id, double score) {
+    public Node(int id, int score) {
         this.id = id;
         this.score = score;
         this.routes = new ArrayList<>();
@@ -27,7 +27,10 @@ public abstract class Node {
     }
 
     public Route getRoute(int i){
-        return routes.get(i);
+        if(i >=0 && i < routes.size()){
+            return routes.get(i);
+        }
+        return null;
     }
 
     public void setRoutes(Route... routes) {
@@ -43,11 +46,11 @@ public abstract class Node {
         this.routes.remove(route);
     }
 
-    public double getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(double score) {
+    public void setScore(int score) {
         this.score = score;
     }
 

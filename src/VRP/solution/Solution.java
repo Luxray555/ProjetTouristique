@@ -59,6 +59,10 @@ public class Solution {
         return sites;
     }
 
+    public SiteNode getSiteWithId(int i){
+        return sites.get(i - Instance.getNbHotel());
+    }
+
     public List<HotelNode> getHotels() {
         return hotels;
     }

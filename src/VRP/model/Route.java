@@ -73,8 +73,8 @@ public class Route {
         scoreTotal += node.getScore();
     }
 
-    public void removeSite(SiteNode node) {
-        if (node == null || !sites.contains(node)) return;
+    public int removeSite(SiteNode node) {
+        if (node == null || !sites.contains(node)) return -1;
 
         int index = sites.indexOf(node);
         if (index != -1) {
@@ -85,7 +85,11 @@ public class Route {
             }
             if (index < sites.size() - 1) {
                 distanceTotal -= Instance.getDistance(node.getId(), sites.get(index + 1).getId());
-                distanceTotal += Instance.getDistance(sites.get(index - 1).getId(), sites.get(index + 1).getId());
+                if(index > 0) {
+                    distanceTotal += Instance.getDistance(sites.get(index - 1).getId(), sites.get(index + 1).getId());
+                }else{
+                    distanceTotal += Instance.getDistance(hotelStart.getId(), sites.get(index + 1).getId());
+                }
             } else {
                 distanceTotal -= Instance.getDistance(node.getId(), hotelEnd.getId());
                 distanceTotal += Instance.getDistance(hotelStart.getId(), hotelEnd.getId());
@@ -93,6 +97,24 @@ public class Route {
             scoreTotal -= node.getScore();
             this.sites.remove(node);
             node.removeRoute(this);
+        }
+        return index;
+    }
+
+    public void addSite(SiteNode node, int index){
+        if(node == null) return;
+        if(index < 0 || index > sites.size()) return;
+        if(index == 0){
+            addFirst(node);
+        }else if(index == sites.size()){
+            addLast(node);
+        }else{
+            distanceTotal -= Instance.getDistance(sites.get(index - 1).getId(), sites.get(index).getId());
+            distanceTotal += Instance.getDistance(sites.get(index - 1).getId(), node.getId());
+            distanceTotal += Instance.getDistance(node.getId(), sites.get(index).getId());
+            scoreTotal += node.getScore();
+            this.sites.add(index, node);
+            node.addRoute(this);
         }
     }
 
@@ -130,31 +152,6 @@ public class Route {
         }
     }
 
-    public void replaceSite(SiteNode node, SiteNode newNode){
-        if(sites.contains(node)){
-            int index = sites.indexOf(node);
-            if(index > 0){
-                distanceTotal -= Instance.getDistance(sites.get(index - 1).getId(), node.getId());
-                distanceTotal += Instance.getDistance(sites.get(index - 1).getId(), newNode.getId());
-            }else{
-                distanceTotal -= Instance.getDistance(hotelStart.getId(), node.getId());
-                distanceTotal += Instance.getDistance(hotelStart.getId(), newNode.getId());
-            }
-            if(index < sites.size() - 1){
-                distanceTotal -= Instance.getDistance(node.getId(), sites.get(index + 1).getId());
-                distanceTotal += Instance.getDistance(newNode.getId(), sites.get(index + 1).getId());
-            }else{
-                distanceTotal -= Instance.getDistance(node.getId(), hotelEnd.getId());
-                distanceTotal += Instance.getDistance(newNode.getId(), hotelEnd.getId());
-            }
-            scoreTotal -= node.getScore();
-            scoreTotal += newNode.getScore();
-            sites.set(index, newNode);
-            node.removeRoute(this);
-            newNode.addRoute(this);
-        }
-    }
-
     public boolean checkDistanceLast(SiteNode node){
         if(!sites.isEmpty()){
             return distanceTotal - Instance.getDistance(sites.get(sites.size() - 1).getId(), hotelEnd.getId()) + Instance.getDistance(sites.get(sites.size() - 1).getId(), node.getId()) + Instance.getDistance(node.getId(), hotelEnd.getId()) <= distanceMax;
@@ -181,16 +178,18 @@ public class Route {
         int index = sites.indexOf(node);
         if(index > 0){
             return sites.get(index - 1);
+        }else{
+            return hotelStart;
         }
-        return null;
     }
 
     public Node getNext(SiteNode node){
         int index = sites.indexOf(node);
         if(index != -1 && index < sites.size() - 1){
             return sites.get(index + 1);
+        }else{
+            return hotelEnd;
         }
-        return null;
     }
 
     public int getId() {
