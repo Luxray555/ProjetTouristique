@@ -67,9 +67,7 @@ public class NearestNeighborPotentialImproveSolution extends NearestNeighborSolu
         });
         this.routes = solutions.isEmpty() ? routesConstruct : solutions.get(0);
         for (Node hotel : hotels) {
-            System.out.println("Avant suppression, routes de " + hotel + " : " + hotel.getRoutes().size());
             hotel.removeAllRoutes();
-            System.out.println("Après suppression, routes de " + hotel + " : " + hotel.getRoutes().size());
         }
         for (Route route : this.routes) {
             route.getHotelStart().addRoute(route);
