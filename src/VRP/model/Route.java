@@ -129,7 +129,7 @@ public class Route {
             distanceTotal += Instance.getDistance(this.hotelStart.getId(), sites.get(0).getId());
         }else{
             this.hotelStart = hotelStart;
-            if(this.hotelEnd != null){
+            if(this.hotelEnd != null && this.hotelStart != null){
                 distanceTotal = Instance.getDistance(this.hotelStart.getId(), this.hotelEnd.getId());
             }
         }
@@ -146,7 +146,7 @@ public class Route {
             distanceTotal += Instance.getDistance(sites.get(sites.size() - 1).getId(), this.hotelEnd.getId());
         }else{
             this.hotelEnd = hotelEnd;
-            if(this.hotelStart != null){
+            if(this.hotelStart != null && this.hotelEnd != null){
                 distanceTotal = Instance.getDistance(this.hotelStart.getId(), this.hotelEnd.getId());
             }
         }

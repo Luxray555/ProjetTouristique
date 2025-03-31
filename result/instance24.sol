@@ -1,13 +1,13 @@
 Input File: data/instance24.txt
 INPUT=data/instance24.txt
-CONSTRUCT=0
+CONSTRUCT=2
 OUTPUT=result/instance24.sol
 METHOD=0
 Solution :
-	Jour 0 : Hotel0 -> Site109(24) -> Site79(2) -> Site54(14) -> Site63(28) -> Site16(24) -> Site99(10) -> Site60(3) -> Site36(21) -> Site20(26) -> Site56(1) -> Site47(11) -> Hotel11 | Score : 164.0 | Distance : 29.230461279548624 | DistanceMax : 29.7572
-	Jour 1 : Hotel11 -> Site105(22) -> Site31(23) -> Site107(8) -> Site100(11) -> Hotel0 | Score : 64.0 | Distance : 21.736716729331835 | DistanceMax : 24.5204
-	Jour 2 : Hotel0 -> Site43(8) -> Site86(10) -> Site70(21) -> Site94(8) -> Site42(24) -> Site92(13) -> Hotel11 | Score : 84.0 | Distance : 24.458725576744975 | DistanceMax : 24.5891
-	Jour 3 : Hotel11 -> Site77(27) -> Site29(6) -> Hotel10 | Score : 33.0 | Distance : 22.797114864793933 | DistanceMax : 24.8695
-	Jour 4 : Hotel10 ->  -> Hotel1 | Score : 0.0 | Distance : 14.266695482836942 | DistanceMax : 16.2543
-Score : 345
-Time: 0.002
+	Jour 0 : Hotel0 -> Site109(24) -> Site105(22) -> Site16(24) -> Site63(28) -> Site20(26) -> Site27(27) -> Hotel8 | Score : 151.0 | Distance : 25.637725733573014 | DistanceMax : 29.7572
+	Jour 1 : Hotel8 -> Site33(13) -> Site39(8) -> Site45(3) -> Site35(13) -> Site93(19) -> Site82(4) -> Site23(21) -> Site98(1) -> Site65(17) -> Site80(17) -> Hotel8 | Score : 116.0 | Distance : 23.391693445977086 | DistanceMax : 24.5204
+	Jour 2 : Hotel8 -> Site51(13) -> Site41(15) -> Site74(4) -> Site104(2) -> Site50(13) -> Site106(2) -> Site108(28) -> Hotel8 | Score : 77.0 | Distance : 22.552943891069617 | DistanceMax : 24.5891
+	Jour 3 : Hotel8 -> Site101(17) -> Site84(1) -> Site25(17) -> Site88(3) -> Site103(16) -> Site28(1) -> Site30(27) -> Hotel13 | Score : 82.0 | Distance : 20.54697838434872 | DistanceMax : 24.8695
+	Jour 4 : Hotel13 -> Site68(17) -> Site75(13) -> Site58(20) -> Site21(24) -> Site37(23) -> Hotel1 | Score : 97.0 | Distance : 12.826206656411959 | DistanceMax : 16.2543
+Score : 523
+Time: 0.289

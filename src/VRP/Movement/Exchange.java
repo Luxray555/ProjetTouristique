@@ -17,9 +17,6 @@ public class Exchange implements Movement {
         Route routeI = nodeI.getRoute(0);
         Route routeJ = nodeJ.getRoute(0);
 
-        Node previousI = nodeI.getPrevious();
-        Node nextI = nodeI.getNext();
-
         double distanceBeforeSwapI = 0.0;
 
         double distanceAfterSwapI = 0.0;
@@ -29,6 +26,23 @@ public class Exchange implements Movement {
         double distanceAfterSwapJ = 0.0;
 
         if(routeI != null && routeJ != null){
+            if(nodeI.getPrevious().getId() == nodeJ.getId()){
+                distanceBeforeSwapI = Instance.getDistance(nodeJ.getPrevious().getId(), nodeJ.getId()) +
+                        Instance.getDistance(nodeJ.getId(), nodeI.getId()) +
+                        Instance.getDistance(nodeI.getId(), nodeI.getNext().getId());
+                distanceAfterSwapI = Instance.getDistance(nodeJ.getPrevious().getId(), nodeI.getId()) +
+                        Instance.getDistance(nodeI.getId(), nodeJ.getId()) +
+                        Instance.getDistance(nodeJ.getId(), nodeI.getNext().getId());
+                return (routeI.getDistanceTotal() - distanceBeforeSwapI + distanceAfterSwapI <= routeI.getDistanceMax());
+            }else if(nodeJ.getPrevious().getId() == nodeI.getId()) {
+                distanceBeforeSwapJ = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getId()) +
+                        Instance.getDistance(nodeI.getId(), nodeJ.getId()) +
+                        Instance.getDistance(nodeJ.getId(), nodeJ.getNext().getId());
+                distanceAfterSwapJ = Instance.getDistance(nodeI.getPrevious().getId(), nodeJ.getId()) +
+                        Instance.getDistance(nodeJ.getId(), nodeI.getId()) +
+                        Instance.getDistance(nodeI.getId(), nodeJ.getNext().getId());
+                return (routeJ.getDistanceTotal() - distanceBeforeSwapJ + distanceAfterSwapJ <= routeJ.getDistanceMax());
+            }
             distanceBeforeSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getId()) +
                     Instance.getDistance(nodeI.getId(), nodeI.getNext().getId());
             distanceAfterSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeJ.getId()) +
