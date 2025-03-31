@@ -213,10 +213,6 @@ public class Route {
         return distanceMax;
     }
 
-    public double getDistanceBetween(Node node1, Node node2) {
-        return Instance.getDistance(node1.getId(), node2.getId());
-    }
-
 
 
     @Override

@@ -17,22 +17,22 @@ public class Exchange implements Movement {
         SiteNode nodeI = (SiteNode) s.getNodes().get(i);
         SiteNode nodeJ = (SiteNode) s.getNodes().get(j);
 
-        Route routeI = nodeI.getRoutes().get(0);
-        Route routeJ = nodeJ.getRoutes().get(0);
+        Route routeI = nodeI.getRoute(0);
+        Route routeJ = nodeJ.getRoute(0);
 
         // Calcul des distances I
         double originalDistanceI = routeI.getDistanceTotal();
-        double distanceBeforeSwapI = routeI.getDistanceBetween(nodeI.getPrevious(), nodeI) +
-                routeI.getDistanceBetween(nodeI, nodeI.getNext());
-        double distanceAfterSwapI = routeI.getDistanceBetween(nodeI.getPrevious(), nodeJ) +
-                routeI.getDistanceBetween(nodeJ, nodeI.getNext());
+        double distanceBeforeSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getId()) +
+                Instance.getDistance(nodeI.getId(), nodeI.getNext().getId());
+        double distanceAfterSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeJ.getId()) +
+                Instance.getDistance(nodeJ.getId(), nodeI.getNext().getId());
 
         // Calcul des distances J
         double originalDistanceJ = routeJ.getDistanceTotal();
-        double distanceBeforeSwapJ = routeJ.getDistanceBetween(nodeJ.getPrevious(), nodeJ) +
-                routeJ.getDistanceBetween(nodeJ, nodeJ.getNext());
-        double distanceAfterSwapJ = routeJ.getDistanceBetween(nodeJ.getPrevious(), nodeI) +
-                routeJ.getDistanceBetween(nodeI, nodeJ.getNext());
+        double distanceBeforeSwapJ = Instance.getDistance(nodeJ.getPrevious().getId(), nodeJ.getId()) +
+                Instance.getDistance(nodeJ.getId(), nodeJ.getNext().getId());
+        double distanceAfterSwapJ = Instance.getDistance(nodeJ.getPrevious().getId(), nodeI.getId()) +
+                Instance.getDistance(nodeI.getId(), nodeJ.getNext().getId());
 
         // Vérifie si les nouvelles distances respectent la capacité maximale de la route
         return (originalDistanceI - distanceBeforeSwapI + distanceAfterSwapI <= routeI.getDistanceMax()) &&

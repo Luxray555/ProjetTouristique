@@ -55,13 +55,7 @@ public class NearestNeighborSolution extends Solution{
         if (route.getId() == routesConstruct.size() - 1) {
             return route.getDistanceTotal() <= route.getDistanceMax();
         }
-        List<HotelNode> orderedHotels = new ArrayList<>(this.hotels.stream().sorted((h1, h2) -> {
-            double dist1 = Instance.getDistance(route.getHotelStart().getId(), h1.getId());
-            double dist2 = Instance.getDistance(route.getHotelStart().getId(), h2.getId());
-            return Double.compare(dist1, dist2);
-        }).toList());
-        orderedHotels.remove(route.getHotelStart());
-        orderedHotels.add(route.getHotelStart());
+        List<HotelNode> orderedHotels = new ArrayList<>(hotels);
         while (!orderedHotels.isEmpty()) {
             Result result = nearestHotel(route.getHotelStart(), orderedHotels);
             if (result.getDistance() <= route.getDistanceMax()) {
@@ -97,6 +91,7 @@ public class NearestNeighborSolution extends Solution{
     }
 
     protected Result nearestHotel(HotelNode node, List<HotelNode> hotels){
+        hotels.remove(node);
         Result result = new Result(null, Double.MAX_VALUE);
         for(HotelNode hotel : hotels){
             double dist = Instance.getDistance(node.getId(), hotel.getId());

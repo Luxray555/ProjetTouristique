@@ -26,6 +26,10 @@ public abstract class Node {
         return routes;
     }
 
+    public Route getRoute(int i){
+        return routes.get(i);
+    }
+
     public void setRoutes(Route... routes) {
         this.routes = new ArrayList<>();
         this.routes.addAll(List.of(routes));
