@@ -1,6 +1,7 @@
 package VRP;
 
 import VRP.Movement.Exchange;
+import VRP.solution.NearestNeighborPotentialSolution;
 import VRP.solution.NearestNeighborScoreSolution;
 import VRP.solution.NearestNeighborSolution;
 import VRP.solution.Solution;
@@ -16,6 +17,8 @@ public class Solver {
 
     private Map<String, String> parameters;
 
+    private Solution s;
+
     public Solver(String[] args) {
         parameters = new HashMap<>();
         for (String arg : args) {
@@ -28,7 +31,6 @@ public class Solver {
 
     public Solution solveConstruct(){
         String construct = parameters.get("CONSTRUCT");
-        Solution s;
         switch (construct) {
             case "0":
                 s = new NearestNeighborSolution();
@@ -36,6 +38,10 @@ public class Solver {
                 return s;
             case "1":
                 s = new NearestNeighborScoreSolution();
+                s.construct();
+                return s;
+            case "2":
+                s = new NearestNeighborPotentialSolution();
                 s.construct();
                 return s;
             default:
@@ -101,5 +107,9 @@ public class Solver {
             System.err.println("Paramètres d'entrée invalides(INPUT/METHOD).");
 
         }
+    }
+
+    public Solution getSolution(){
+        return s;
     }
 }

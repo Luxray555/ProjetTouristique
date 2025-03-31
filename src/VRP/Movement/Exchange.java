@@ -102,7 +102,7 @@ public class Exchange implements Movement {
 
     @Override
     public boolean applyBestImprovement(Solution s) {
-        double max = Double.MIN_VALUE;  // On commence avec la plus petite valeur possible pour chercher un maximum
+        double max = 0;  // On commence avec la plus petite valeur possible pour chercher un maximum
         Pair bestPair = new Pair(-1, -1);
         // On teste tous les échanges possibles entre les sites
         for (int i = 0; i < s.getSites().size(); i++) {
@@ -117,7 +117,6 @@ public class Exchange implements Movement {
                 }
             }
         }
-
         if (max > s.getScore()) {
             apply(s, bestPair.getI(), bestPair.getJ());
             System.out.println("Échange effectué entre les noeuds " + bestPair.getI() + " et " + bestPair.getJ());
