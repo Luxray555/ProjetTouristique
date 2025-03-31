@@ -53,24 +53,58 @@ public class Route {
 
     public void addLast(SiteNode node) {
         if(node == null) return;
+
         if (!sites.isEmpty()) {
+            // Add distance from last site to new node
             distanceTotal += Instance.getDistance(sites.get(sites.size() - 1).getId(), node.getId());
+
+            // Replace distance from last site to hotelEnd with node to hotelEnd
             if(hotelEnd != null) {
-                distanceTotal += Instance.getDistance(node.getId(), hotelEnd.getId());
                 distanceTotal -= Instance.getDistance(sites.get(sites.size() - 1).getId(), hotelEnd.getId());
+                distanceTotal += Instance.getDistance(node.getId(), hotelEnd.getId());
             }
         } else {
-            if(hotelEnd != null){
-                distanceTotal += Instance.getDistance(hotelEnd.getId(), node.getId());
-                if(hotelStart != null){
-                    distanceTotal += Instance.getDistance(node.getId(), hotelStart.getId());
-                    distanceTotal -= Instance.getDistance(hotelStart.getId(), hotelEnd.getId());
-                }
+            // Empty route case
+            if(hotelStart != null && hotelEnd != null) {
+                // Replace direct hotel-to-hotel distance with hotelStart->node->hotelEnd
+                distanceTotal = Instance.getDistance(hotelStart.getId(), node.getId())
+                        + Instance.getDistance(node.getId(), hotelEnd.getId());
+            } else if (hotelStart != null) {
+                distanceTotal = Instance.getDistance(hotelStart.getId(), node.getId());
+            } else if (hotelEnd != null) {
+                distanceTotal = Instance.getDistance(node.getId(), hotelEnd.getId());
             }
         }
         this.sites.add(node);
         node.addRoute(this);
         scoreTotal += node.getScore();
+    }
+
+    public void removeLast() {
+        if (!sites.isEmpty()) {
+            SiteNode node = sites.get(sites.size() - 1);
+
+            if (sites.size() > 1) {
+                // Remove distance from second-to-last to last node
+                distanceTotal -= Instance.getDistance(sites.get(sites.size() - 2).getId(), node.getId());
+
+                // Restore distance from second-to-last to hotelEnd
+                if (hotelEnd != null) {
+                    distanceTotal += Instance.getDistance(sites.get(sites.size() - 2).getId(), hotelEnd.getId());
+                }
+            } else {
+                // Only one node - restore original hotel-to-hotel distance
+                if (hotelStart != null && hotelEnd != null) {
+                    distanceTotal = Instance.getDistance(hotelStart.getId(), hotelEnd.getId());
+                } else {
+                    distanceTotal = 0;
+                }
+            }
+
+            scoreTotal -= node.getScore();
+            this.sites.remove(node);
+            node.removeRoute(this);
+        }
     }
 
     public int removeSite(SiteNode node) {

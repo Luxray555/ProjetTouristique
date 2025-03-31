@@ -116,14 +116,14 @@ public class Exchange implements Movement {
 
     @Override
     public boolean applyBestImprovement(Solution s) {
-        double max = 0;  // On commence avec la plus petite valeur possible pour chercher un maximum
+        double max = 0;
         Pair bestPair = new Pair(-1, -1);
-        // On teste tous les échanges possibles entre les sites
+
         for (int i = 0; i < s.getSites().size(); i++) {
             for (int j = i + 1; j < s.getSites().size(); j++) {
                 if (check(s, i, j)) {
                     double eval = evaluate(s, i, j);
-                    if (eval > max) {  // Si l'évaluation est meilleure
+                    if (eval > max) {
                         max = eval;
                         bestPair.setI(i);
                         bestPair.setJ(j);
@@ -134,10 +134,10 @@ public class Exchange implements Movement {
         if (max > s.getScore()) {
             apply(s, bestPair.getI(), bestPair.getJ());
             System.out.println("Échange effectué entre les noeuds " + bestPair.getI() + " et " + bestPair.getJ());
-            return true;  // Un échange améliorant a été effectué
+            return true;
         }
 
-        return false;  // Aucun échange améliorant trouvé
+        return false;
     }
 
 
@@ -145,17 +145,14 @@ public class Exchange implements Movement {
     public boolean applyFirstImprovement(Solution s) {
         List<Pair> toTest = new ArrayList<>();
 
-        // On génère toutes les paires possibles de sites
         for (int i = 0; i < s.getNodes().size(); i++) {
             for (int j = i + 1; j < s.getNodes().size(); j++) {
                 toTest.add(new Pair(i, j));
             }
         }
 
-        // Mélange des paires pour tester un échange aléatoire
         Collections.shuffle(toTest);
 
-        // On parcourt les paires et applique le premier échange améliorant trouvé
         for (Pair pair : toTest) {
             int i = pair.getI();
             int j = pair.getJ();
@@ -166,6 +163,6 @@ public class Exchange implements Movement {
             }
         }
 
-        return false; // Si aucun échange n'est améliorant
+        return false;
     }
 }
