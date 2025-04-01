@@ -1,6 +1,8 @@
 package VRP.solution;
 
 import VRP.*;
+import VRP.Movement.Exchange;
+import VRP.Movement.Relocate;
 import VRP.model.HotelNode;
 import VRP.model.Node;
 import VRP.model.Route;
@@ -92,7 +94,30 @@ public class Solution {
     }
 
     public void solveVND(){
-
+        boolean solved = false;
+        Exchange exchange = new Exchange();
+        Relocate relocate = new Relocate();
+        int i = 0;
+        while(!solved){
+            switch(i){
+                case 0: {
+                    boolean verif = exchange.applyBestImprovement(this);
+                    if(!verif){
+                        i++;
+                    }
+                    break;
+                }
+                case 1: {
+                    boolean verif = relocate.applyBestImprovement(this);
+                    if(!verif){
+                        solved = true;
+                    }else{
+                        i = 0;
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     public void solveLNS(){

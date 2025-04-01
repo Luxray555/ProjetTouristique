@@ -8,5 +8,5 @@ Solution :
 	Jour 1 : Hotel6 -> Site28(27) -> Site23(17) -> Site82(1) -> Site86(3) -> Site101(16) -> Site26(1) -> Site12(7) -> Site24(27) -> Hotel0 | Score : 99 | Distance : 35.74077933646255 | DistanceMax : 35.8361
 	Jour 2 : Hotel0 -> Site41(8) -> Site84(10) -> Site68(21) -> Site92(8) -> Site40(24) -> Site90(13) -> Site20(16) -> Site25(27) -> Site63(17) -> Site96(1) -> Site33(13) -> Site99(17) -> Site43(3) -> Site37(8) -> Hotel7 | Score : 186 | Distance : 35.209210481590205 | DistanceMax : 35.8072
 	Jour 3 : Hotel7 -> Site31(13) -> Site49(13) -> Site39(15) -> Site72(4) -> Site102(2) -> Site48(13) -> Site15(3) -> Site66(17) -> Site93(1) -> Hotel1 | Score : 81 | Distance : 30.134634026696823 | DistanceMax : 30.1847
-Score : 633
-Time: 0.15
+Score : 614
+Time: 0.12

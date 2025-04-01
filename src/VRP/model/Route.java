@@ -38,12 +38,13 @@ public class Route {
                 distanceTotal -= Instance.getDistance(hotelStart.getId(), sites.get(0).getId());
             }
         } else {
-            if(hotelStart != null){
-                distanceTotal += Instance.getDistance(hotelStart.getId(), node.getId());
-                if(hotelEnd != null){
-                    distanceTotal += Instance.getDistance(node.getId(), hotelEnd.getId());
-                    distanceTotal -= Instance.getDistance(hotelStart.getId(), hotelEnd.getId());
-                }
+            if(hotelStart != null && hotelEnd != null) {
+                distanceTotal = Instance.getDistance(hotelStart.getId(), node.getId())
+                        + Instance.getDistance(node.getId(), hotelEnd.getId());
+            }else if(hotelStart != null){
+                distanceTotal = Instance.getDistance(hotelStart.getId(), node.getId());
+            }else if(hotelEnd != null){
+                distanceTotal = Instance.getDistance(hotelEnd.getId(), node.getId());
             }
         }
         this.sites.add(0, node);

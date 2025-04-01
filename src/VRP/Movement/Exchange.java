@@ -1,6 +1,7 @@
 package VRP.Movement;
 
 import VRP.*;
+import VRP.checker.Checker;
 import VRP.model.*;
 import VRP.solution.Solution;
 
@@ -104,15 +105,23 @@ public class Exchange implements Movement {
 
         if(routeI != null){
             indexI = routeI.removeSite(nodeI);
+            System.out.println("Remove I: " + indexI);
+            System.out.print(Checker.checkDistanceRoute(s));
         }
         if(routeJ != null){
             indexJ = routeJ.removeSite(nodeJ);
+            System.out.println("Remove J: " + indexJ);
+            System.out.print(Checker.checkDistanceRoute(s));
         }
         if(indexI != -1){
             routeI.addSite(nodeJ, indexI);
+            System.out.println("Add I: " + indexI);
+            System.out.print(Checker.checkDistanceRoute(s));
         }
         if (indexJ != -1){
             routeJ.addSite(nodeI, indexJ);
+            System.out.println("Add J: " + indexJ);
+            System.out.print(Checker.checkDistanceRoute(s));
         }
     }
 
