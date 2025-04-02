@@ -18,7 +18,13 @@ public class Route {
     public Route(int id, HotelNode hotelStart, HotelNode hotelEnd, double distanceMax) {
         this.id = id;
         this.hotelStart = hotelStart;
+        if(hotelStart != null){
+            hotelStart.addRoute(this);
+        }
         this.hotelEnd = hotelEnd;
+        if(hotelEnd != null){
+            hotelEnd.addRoute(this);
+        }
         this.sites = new ArrayList<>();
         this.scoreTotal = 0;
         if(hotelStart != null && hotelEnd != null){

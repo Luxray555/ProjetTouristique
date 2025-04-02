@@ -3,6 +3,7 @@ package VRP.solution;
 import VRP.*;
 import VRP.Movement.Exchange;
 import VRP.Movement.Relocate;
+import VRP.checker.Checker;
 import VRP.model.HotelNode;
 import VRP.model.Node;
 import VRP.model.Route;
@@ -86,6 +87,31 @@ public class Solution {
     }
 
     public void solveILS(){
+        Solution best = this.copy();
+        for(int i = 0; i < 1000; i++){
+            Solution solution = best.copy();
+            deconstructSolution(solution);
+            solution.solveVND();
+            if(solution.getScore() > best.getScore()){
+                best = solution;
+            }
+        }
+        this.routes = best.getRoutes();
+        this.score = best.getScore();
+        Checker.checkSolution(this);
+    }
+
+    private void deconstructSolution(Solution solution){
+        for(Route route : solution.routes){
+            int size = route.getSites().size();
+            for(int i = 0; i < size/2; i++){
+                int index = (int)(Math.random() * route.getSites().size());
+                SiteNode site = route.getSites().get(index);
+                route.removeSite(site);
+            }
+        }
+        solution.evaluate();
+        System.out.println(Checker.checkSolution(solution));
 
     }
 
@@ -154,13 +180,14 @@ public class Solution {
         solution.setScore(score);
         List<Route> newRoutes = new ArrayList<>();
         for(Route route : routes){
-            Route newRoute = new Route(route.getId(), route.getHotelStart(), route.getHotelEnd(), route.getDistanceMax());
+            Route newRoute = new Route(route.getId(), solution.getHotels().get(route.getHotelStart().getId()), solution.getHotels().get(route.getHotelEnd().getId()), route.getDistanceMax());
             for(SiteNode site : route.getSites()){
-                newRoute.addLast(site);
+                newRoute.addLast(solution.getSiteWithId(site.getId()));
             }
             newRoutes.add(newRoute);
         }
         solution.setRoutes(newRoutes);
+        System.out.println(Checker.checkSolution(solution));
         return solution;
     }
 }
