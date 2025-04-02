@@ -93,7 +93,6 @@ public class Exchange implements Movement {
 
     private void apply(Solution s, int i, int j) {
 
-        System.out.println(evaluate(s, i, j));
         s.setScore(evaluate(s, i, j));
 
         SiteNode nodeI = s.getSites().get(i);

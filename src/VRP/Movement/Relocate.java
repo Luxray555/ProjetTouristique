@@ -10,30 +10,21 @@ import java.util.List;
 
 public class Relocate implements Movement {
 
-    boolean check(Solution s, int i, int j) {
+    private boolean check(Solution s, int i, int j) {
+
         SiteNode nodeI = s.getSites().get(i);
         SiteNode nodeJ = s.getSites().get(j);
 
-        Route routeI = nodeI.getRoute(0);
-        Route routeJ = nodeJ.getRoute(0);
+        Route routeJ = s.getSites().get(j).getRoute(0);
 
-        if (routeI == null || nodeI.getNext() == null || nodeI.getPrevious() == null) {
+        if (routeJ == null) {
             return false;
-        }
+        }else{
 
-        double distanceBeforeI = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getId()) +
-                Instance.getDistance(nodeI.getId(), nodeI.getNext().getId());
-        double distanceAfterI = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getNext().getId());
+            double distanceBeforeSwap = Instance.getDistance(nodeJ.getId(), nodeJ.getNext().getId());
+            double distanceAfterSwap = Instance.getDistance(nodeJ.getId(), nodeI.getId()) + Instance.getDistance(nodeI.getId(), nodeJ.getNext().getId());
 
-        if (routeJ != null) {
-            double distanceBeforeJ = Instance.getDistance(nodeJ.getId(), nodeJ.getNext().getId());
-            double distanceAfterJ = Instance.getDistance(nodeJ.getId(), nodeI.getId()) +
-                    Instance.getDistance(nodeI.getId(), nodeJ.getNext().getId());
-
-            return (routeI.getDistanceTotal() - distanceBeforeI + distanceAfterI <= routeI.getDistanceMax()) &&
-                    (routeJ.getDistanceTotal() - distanceBeforeJ + distanceAfterJ <= routeJ.getDistanceMax());
-        } else {
-            return routeI.getDistanceTotal() - distanceBeforeI + distanceAfterI <= routeI.getDistanceMax();
+            return (routeJ.getDistanceTotal() - distanceBeforeSwap + distanceAfterSwap <= routeJ.getDistanceMax());
         }
     }
 
@@ -42,7 +33,7 @@ public class Relocate implements Movement {
         SiteNode siteJ = s.getSites().get(j);
 
         if (siteI.getRoutes().isEmpty()) {
-            return s.getScore() - siteJ.getScore() + siteI.getScore();
+            return s.getScore() + siteI.getScore();
         } else {
             return s.getScore();
         }

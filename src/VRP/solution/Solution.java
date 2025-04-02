@@ -105,6 +105,7 @@ public class Solution {
                     if(!verif){
                         i++;
                     }
+
                     break;
                 }
                 case 1: {
