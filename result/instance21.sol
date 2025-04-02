@@ -10,4 +10,4 @@ Solution :
 	Jour 3 : Hotel8 -> Site15(18) -> Site18(18) -> Site26(18) -> Site30(18) -> Site27(24) -> Site31(24) -> Site34(18) -> Hotel2 | Score : 138 | Distance : 14.233345472033857 | DistanceMax : 16.1422
 	Jour 4 : Hotel2 -> Site33(12) -> Site36(12) -> Site39(12) -> Site40(6) -> Site38(6) -> Hotel1 | Score : 48 | Distance : 10.485281374238573 | DistanceMax : 11.3131
 Score : 624
-Time: 0.578
+Time: 0.438
