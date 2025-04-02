@@ -49,9 +49,6 @@ public class Solver {
             case "3":
                 s = new NearestNeighborPotentialImproveSolution();
                 s.construct();
-                Checker.checkDistanceRoute(s);
-                Exchange exchange = new Exchange();
-                exchange.applyBestImprovement(s);
                 return s;
             default:
                 System.err.println("Parametre de construction invalide(CONSTRUCT): " + construct);

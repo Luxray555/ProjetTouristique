@@ -91,7 +91,37 @@ public class Route {
 
                 // Restaurer la distance entre l'avant-dernier et l'hôtel de fin
                 if (hotelEnd != null) {
+                    distanceTotal -= Instance.getDistance(node.getId(), hotelEnd.getId());
                     distanceTotal += Instance.getDistance(sites.get(sites.size() - 2).getId(), hotelEnd.getId());
+                }
+            } else {
+                // Si on retire le seul site, restaurer la distance hôtel-départ <-> hôtel-fin
+                if (hotelStart != null && hotelEnd != null) {
+                    distanceTotal = Instance.getDistance(hotelStart.getId(), hotelEnd.getId());
+                } else {
+                    distanceTotal = 0;
+                }
+            }
+
+            scoreTotal -= node.getScore();
+
+            node.removeRoute(this);
+            this.sites.remove(node);
+        }
+    }
+
+    public void removeFirst() {
+        if (!sites.isEmpty()) {
+            SiteNode node = sites.get(0);
+
+            if (sites.size() > 1) {
+                // Enlever la distance entre le premier et le deuxième site
+                distanceTotal -= Instance.getDistance(node.getId(), sites.get(1).getId());
+
+                // Restaurer la distance entre l'hôtel de départ et le deuxième site
+                if (hotelStart != null) {
+                    distanceTotal -= Instance.getDistance(hotelStart.getId(), node.getId());
+                    distanceTotal += Instance.getDistance(hotelStart.getId(), sites.get(1).getId());
                 }
             } else {
                 // Si on retire le seul site, restaurer la distance hôtel-départ <-> hôtel-fin
@@ -112,28 +142,20 @@ public class Route {
 
     public int removeSite(SiteNode node) {
         if (node == null || !sites.contains(node)) return -1;
-
         int index = sites.indexOf(node);
-        if (index != -1) {
-            if (index > 0) {
+        if(index != -1){
+            if(index == 0){
+                removeFirst();
+            }else if(index == sites.size() - 1){
+                removeLast();
+            }else{
                 distanceTotal -= Instance.getDistance(sites.get(index - 1).getId(), node.getId());
-            } else {
-                distanceTotal -= Instance.getDistance(hotelStart.getId(), node.getId());
-            }
-            if (index < sites.size() - 1) {
                 distanceTotal -= Instance.getDistance(node.getId(), sites.get(index + 1).getId());
-                if(index > 0) {
-                    distanceTotal += Instance.getDistance(sites.get(index - 1).getId(), sites.get(index + 1).getId());
-                }else{
-                    distanceTotal += Instance.getDistance(hotelStart.getId(), sites.get(index + 1).getId());
-                }
-            } else {
-                distanceTotal -= Instance.getDistance(node.getId(), hotelEnd.getId());
-                distanceTotal += Instance.getDistance(hotelStart.getId(), hotelEnd.getId());
+                distanceTotal += Instance.getDistance(sites.get(index - 1).getId(), sites.get(index + 1).getId());
+                scoreTotal -= node.getScore();
+                node.removeRoute(this);
+                this.sites.remove(node);
             }
-            scoreTotal -= node.getScore();
-            this.sites.remove(node);
-            node.removeRoute(this);
         }
         return index;
     }

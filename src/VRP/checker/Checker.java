@@ -29,9 +29,11 @@ public class Checker {
     public static boolean checkScore(Solution solution){
         int score = 0;
         for(Route route : solution.getRoutes()){
-            score += route.getScoreTotal();
+            for(SiteNode site : route.getSites()){
+                score += site.getScore();
+            }
         }
-        System.out.println("Score : " + score + (score == solution.getScore() ? " : OK" : " : NON OK"));
+        System.out.println("Score : " + score + " == " + solution.getScore() + (score == solution.getScore() ? " : OK" : " : NON OK"));
         return score == solution.getScore();
     }
 

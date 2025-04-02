@@ -44,9 +44,11 @@ public class NearestNeighborPotentialImproveSolution extends NearestNeighborSolu
         });
 
         this.routes = solutions.isEmpty() ? routesConstruct : solutions.get(0);
+        for(SiteNode site : sites){
+            site.removeAllRoutes();
+        }
         for(Route route : this.routes){
             for(SiteNode site : route.getSites()){
-                site.removeAllRoutes();
                 site.addRoute(route);
             }
         }

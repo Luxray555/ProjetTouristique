@@ -37,7 +37,6 @@ public class NearestNeighborSolution extends Solution{
                     current = null;
                 }
             }
-
         }
     }
 

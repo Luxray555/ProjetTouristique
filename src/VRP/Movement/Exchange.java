@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class Exchange implements Movement {
 
     boolean check(Solution s, int i, int j) {
+        if(i == j) return false;
         SiteNode nodeI = s.getSites().get(i);
         SiteNode nodeJ = s.getSites().get(j);
 
@@ -91,8 +92,9 @@ public class Exchange implements Movement {
     }
 
     private void apply(Solution s, int i, int j) {
-        s.setScore(evaluate(s, i, j));
 
+        System.out.println(evaluate(s, i, j));
+        s.setScore(evaluate(s, i, j));
 
         SiteNode nodeI = s.getSites().get(i);
         SiteNode nodeJ = s.getSites().get(j);
@@ -105,23 +107,15 @@ public class Exchange implements Movement {
 
         if(routeI != null){
             indexI = routeI.removeSite(nodeI);
-            System.out.println("Remove I: " + indexI);
-            System.out.print(Checker.checkDistanceRoute(s));
         }
         if(routeJ != null){
             indexJ = routeJ.removeSite(nodeJ);
-            System.out.println("Remove J: " + indexJ);
-            System.out.print(Checker.checkDistanceRoute(s));
         }
         if(indexI != -1){
             routeI.addSite(nodeJ, indexI);
-            System.out.println("Add I: " + indexI);
-            System.out.print(Checker.checkDistanceRoute(s));
         }
         if (indexJ != -1){
             routeJ.addSite(nodeI, indexJ);
-            System.out.println("Add J: " + indexJ);
-            System.out.print(Checker.checkDistanceRoute(s));
         }
     }
 
@@ -156,8 +150,8 @@ public class Exchange implements Movement {
     public boolean applyFirstImprovement(Solution s) {
         List<Pair> toTest = new ArrayList<>();
 
-        for (int i = 0; i < s.getNodes().size(); i++) {
-            for (int j = i + 1; j < s.getNodes().size(); j++) {
+        for (int i = 0; i < s.getSites().size(); i++) {
+            for (int j = i + 1; j < s.getSites().size(); j++) {
                 toTest.add(new Pair(i, j));
             }
         }
