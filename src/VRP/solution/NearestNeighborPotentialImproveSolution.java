@@ -7,7 +7,7 @@ import VRP.model.SiteNode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public class NearestNeighborPotentialImproveSolution extends NearestNeighborSolution{
 
@@ -38,11 +38,10 @@ public class NearestNeighborPotentialImproveSolution extends NearestNeighborSolu
         List<List<Route>> solutions = new ArrayList<>();
         recursiveSites(routesConstruct.get(0), routesConstruct, solutions, new ArrayList<>(), routesConstruct.get(0).getHotelStart());
         solutions.sort((o1, o2) -> {
-            double sum1 = o1.stream().mapToDouble(Route::getDistanceTotal).sum();
-            double sum2 = o2.stream().mapToDouble(Route::getDistanceTotal).sum();
+            double sum1 = o1.stream().mapToDouble(Route::getScoreTotal).sum();
+            double sum2 = o2.stream().mapToDouble(Route::getScoreTotal).sum();
             return Double.compare(sum2, sum1);
         });
-
         this.routes = solutions.isEmpty() ? routesConstruct : solutions.get(0);
         for(SiteNode site : sites){
             site.removeAllRoutes();
@@ -77,12 +76,15 @@ public class NearestNeighborPotentialImproveSolution extends NearestNeighborSolu
         }
     }
 
+    private int max = 0;
+
     protected void recursiveSites(Route currentRoute, List<Route> routesConstruct,
                                   List<List<Route>> solutions, List<Node> visitedSites, Node lastSite) {
-        Result result = nearestSite(lastSite, currentRoute, visitedSites);
+        List<Node> alreadyCheck = new ArrayList<>();
+        Result result = validSite(lastSite, currentRoute, visitedSites, alreadyCheck);
         SiteNode site = (SiteNode) result.getNode();
 
-        if (site != null && currentRoute.checkDistanceLast(site) && !visitedSites.contains(site)) {
+        while (site != null && currentRoute.checkDistanceLast(site)) {
             currentRoute.addLast(site);
             visitedSites.add(site);
 
@@ -90,16 +92,37 @@ public class NearestNeighborPotentialImproveSolution extends NearestNeighborSolu
 
             currentRoute.removeLast();
             visitedSites.remove(site);
+            alreadyCheck.add(site);
+            result = validSite(lastSite, currentRoute, visitedSites, alreadyCheck);
+            site = (SiteNode) result.getNode();
         }
 
-        if (currentRoute.getId() < routesConstruct.size() - 1) {
-            Route nextRoute = routesConstruct.get(currentRoute.getId() + 1);
-            recursiveSites(nextRoute, routesConstruct, solutions, visitedSites, nextRoute.getHotelStart());
-        } else {
-            if (currentRoute.getDistanceTotal() <= currentRoute.getDistanceMax()) {
+        if (currentRoute.getId() < routesConstruct.size() - 1){
+            recursiveSites(routesConstruct.get(currentRoute.getId() + 1), routesConstruct, solutions, visitedSites, routesConstruct.get(currentRoute.getId() + 1).getHotelStart());
+        }else{
+            if(currentRoute.getDistanceTotal() <= currentRoute.getDistanceMax()) {
+                int newScore = routesConstruct.stream().mapToInt(Route::getScoreTotal).sum();
+                if(newScore >= max) {
+                    max = newScore;
+                    System.out.println(max);
+                }
                 solutions.add(cloneRoutes(routesConstruct));
             }
         }
+    }
+
+    protected Result validSite(Node node, Route route, List<Node> visited, List<Node> alreadyCheck){
+        Result result = new Result(null, Double.MAX_VALUE);
+        for(SiteNode site : sites){
+            if(!visited.contains(site) && !alreadyCheck.contains(site)){
+                double dist = Instance.getDistance(node.getId(), site.getId());
+                if(dist < result.getDistance() && route.checkDistanceLast(site)){
+                    result.setDistance(dist);
+                    result.setNode(site);
+                }
+            }
+        }
+        return result;
     }
 
     private List<Route> cloneRoutes(List<Route> routes) {
