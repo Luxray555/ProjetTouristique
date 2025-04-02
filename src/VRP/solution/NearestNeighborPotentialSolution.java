@@ -16,27 +16,12 @@ public class NearestNeighborPotentialSolution extends NearestNeighborSolution{
     }
 
     @Override
-    protected void constructHotels() {
-        List<Route> routesConstruct = new ArrayList<>(this.routes);
-
-        List<List<Route>> solutions = new ArrayList<>();
-        recursiveHotels(routesConstruct.get(0), routesConstruct, solutions);
-
-        // Tri des solutions par potentiel et pas distance
+    protected void sortedSolutions(List<List<Route>> solutions){
         solutions.sort((o1, o2) -> {
             int potentialCompare = Integer.compare(potentielHotels(o2), potentielHotels(o1)); // Descending order
             if (potentialCompare != 0) return potentialCompare; // If different, use this order
             return Double.compare(sumDistance(o1), sumDistance(o2)); // Otherwise, sort by distance (ascending)
         });
-        this.routes = solutions.isEmpty() ? routesConstruct : solutions.get(0);
-
-        for(HotelNode hotel : hotels){
-            hotel.removeAllRoutes();
-        }
-        for(Route route : this.routes){
-            route.getHotelStart().addRoute(route);
-            route.getHotelEnd().addRoute(route);
-        }
     }
 
     private int potentielHotels(List<Route> routes){

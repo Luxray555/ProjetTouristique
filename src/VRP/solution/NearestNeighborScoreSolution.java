@@ -22,7 +22,7 @@ public class NearestNeighborScoreSolution extends NearestNeighborSolution{
                 if(route.checkDistanceLast(site)) {
                     double scoreDistanceSite = site.getScore()/distance;
                     double scoreDistanceResult = result.getNode() != null ? result.getNode().getScore()/result.getDistance() : 0.0;
-                     if (scoreDistanceSite > result.getDistance()) {
+                     if (scoreDistanceSite > scoreDistanceResult) {
                          result.setDistance(distance);
                          result.setNode(site);
                      }else if(scoreDistanceSite == scoreDistanceResult && distance < result.getDistance()){

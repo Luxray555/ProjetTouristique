@@ -2,11 +2,7 @@ package VRP;
 
 import VRP.Movement.Exchange;
 import VRP.checker.Checker;
-import VRP.solution.NearestNeighborPotentialImproveSolution;
-import VRP.solution.NearestNeighborPotentialSolution;
-import VRP.solution.NearestNeighborScoreSolution;
-import VRP.solution.NearestNeighborSolution;
-import VRP.solution.Solution;
+import VRP.solution.*;
 
 import java.io.File;
 import java.util.HashMap;
@@ -47,7 +43,11 @@ public class Solver {
                 s.construct();
                 return s;
             case "3":
-                s = new NearestNeighborPotentialImproveSolution();
+                s = new NearestNeighborAllHotelsSolution();
+                s.construct();
+                return s;
+            case "4":
+                s = new NearestNeighborScoreAllHotelsSolution();
                 s.construct();
                 return s;
             default:

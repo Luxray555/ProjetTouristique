@@ -129,6 +129,19 @@ public class Solution {
 
     }
 
+    protected void resetLinks(){
+        for(Node node : nodes){
+            node.removeAllRoutes();
+        }
+        for(Route route : this.routes){
+            route.getHotelStart().addRoute(route);
+            route.getHotelEnd().addRoute(route);
+            for(SiteNode site : route.getSites()){
+                site.addRoute(route);
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return "Solution :" +

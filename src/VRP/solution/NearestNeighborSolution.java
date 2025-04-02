@@ -18,11 +18,12 @@ public class NearestNeighborSolution extends Solution{
     @Override
     public void construct() {
         this.constructHotels();
-        this.constructSites();
+        this.constructSites(routes);
+        this.resetLinks();
         this.evaluate();
     }
 
-    protected void constructSites(){
+    protected void constructSites(List<Route> routes){
         List<Node> visited = new ArrayList<>();
         for(int i = 0; i < routes.size(); i++){
             Route route = routes.get(i);
@@ -42,10 +43,14 @@ public class NearestNeighborSolution extends Solution{
 
     protected void constructHotels() {
         List<Route> routesConstruct = new ArrayList<>(this.routes);
+
         List<List<Route>> solutions = new ArrayList<>();
         recursiveHotels(routesConstruct.get(0), routesConstruct, solutions);
 
+        sortedSolutions(solutions);
+
         this.routes = solutions.isEmpty() ? routesConstruct : solutions.get(0);
+
         for(HotelNode hotel : hotels){
             hotel.removeAllRoutes();
         }
@@ -53,6 +58,9 @@ public class NearestNeighborSolution extends Solution{
             route.getHotelStart().addRoute(route);
             route.getHotelEnd().addRoute(route);
         }
+    }
+
+    protected void sortedSolutions(List<List<Route>> solution){
     }
 
 
