@@ -92,7 +92,6 @@ public class Exchange implements Movement {
     }
 
     private void apply(Solution s, int i, int j) {
-
         s.setScore(evaluate(s, i, j));
 
         SiteNode nodeI = s.getSites().get(i);
@@ -188,13 +187,7 @@ public class Exchange implements Movement {
 
     @Override
     public boolean applyFirstImprovement(Solution s) {
-        List<Pair> toTest = new ArrayList<>();
-
-        for (int i = 0; i < s.getSites().size(); i++) {
-            for (int j = i + 1; j < s.getSites().size(); j++) {
-                toTest.add(new Pair(i, j));
-            }
-        }
+        List<Pair> toTest = getPairs(s);
 
         Collections.shuffle(toTest);
 
@@ -209,5 +202,35 @@ public class Exchange implements Movement {
         }
 
         return false;
+    }
+
+    @Override
+    public void applyRandom(Solution s, int nb) {
+        List<Pair> toTest = getPairs(s);
+        Collections.shuffle(toTest);
+
+        int applied = 0;
+        for (Pair pair : toTest) {
+            if (applied >= nb) break;
+
+            int i = pair.getI();
+            int j = pair.getJ();
+
+            if (check(s, i, j)) {
+                System.out.println("Échange effectué entre les nœuds " + i + " et " + j);
+                apply(s, i, j);
+                applied++;
+            }
+        }
+    }
+
+    public List<Pair> getPairs(Solution s) {
+        List<Pair> pairs = new ArrayList<>();
+        for (int i = 0; i < s.getSites().size(); i++) {
+            for (int j = i + 1; j < s.getSites().size(); j++) {
+                pairs.add(new Pair(i, j));
+            }
+        }
+        return pairs;
     }
 }

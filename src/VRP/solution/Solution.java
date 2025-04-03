@@ -90,7 +90,7 @@ public class Solution {
         Solution best = this.copy();
         for(int i = 0; i < 1000; i++){
             Solution solution = best.copy();
-            deconstructSolution(solution);
+            deconstructSolution(20);
             solution.solveVND();
             if(solution.getScore() > best.getScore()){
                 best = solution;
@@ -101,18 +101,16 @@ public class Solution {
         Checker.checkSolution(this);
     }
 
-    private void deconstructSolution(Solution solution){
-        for(Route route : solution.routes){
+    private void deconstructSolution(int percentage){
+        for(Route route : this.routes){
             int size = route.getSites().size();
-            for(int i = 0; i < size/2; i++){
+            for(int i = 0; i < size*(percentage/100); i++){
                 int index = (int)(Math.random() * route.getSites().size());
                 SiteNode site = route.getSites().get(index);
                 route.removeSite(site);
             }
         }
-        solution.evaluate();
-        System.out.println(Checker.checkSolution(solution));
-
+        this.evaluate();
     }
 
     public void solveTS(){
@@ -152,7 +150,6 @@ public class Solution {
     }
 
     public void solveVNS(){
-
     }
 
     protected void resetLinks(){

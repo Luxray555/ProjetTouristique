@@ -88,15 +88,7 @@ public class Relocate implements Movement {
 
     @Override
     public boolean applyFirstImprovement(Solution s) {
-        List<Pair> toTest = new ArrayList<>();
-
-        for (int i = 0; i < s.getNodes().size(); i++) {
-            for (int j = 0; j < s.getNodes().size(); j++) {
-                if (i != j) {
-                    toTest.add(new Pair(i, j));
-                }
-            }
-        }
+        List<Pair> toTest = getPairs(s);
 
         Collections.shuffle(toTest);
 
@@ -110,5 +102,41 @@ public class Relocate implements Movement {
             }
         }
         return false;
+    }
+
+    @Override
+    public void applyRandom(Solution s, int nb) {
+        List<Pair> toTest = getPairs(s);
+
+        Collections.shuffle(toTest);
+
+        int applied = 0;
+        for (Pair pair : toTest) {
+            if (applied >= nb) break;
+
+            int i = pair.getI();
+            int j = pair.getJ();
+
+            if (check(s, i, j)) {
+                System.out.println("Déplacement du nœud " + i + " vers la position de " + j);
+                apply(s, i, j);
+                applied++;
+            }
+        }
+    }
+
+    @Override
+    public List<Pair> getPairs(Solution s) {
+        List<Pair> toTest = new ArrayList<>();
+
+        for (int i = 0; i < s.getNodes().size(); i++) {
+            for (int j = 0; j < s.getNodes().size(); j++) {
+                if (i != j) {
+                    toTest.add(new Pair(i, j));
+                }
+            }
+        }
+
+        return toTest;
     }
 }

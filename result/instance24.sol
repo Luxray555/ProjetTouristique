@@ -1,13 +1,13 @@
 Input File: data/instance24.txt
 INPUT=data/instance24.txt
-CONSTRUCT=0
+CONSTRUCT=4
 OUTPUT=result/instance24.sol
 METHOD=5
 Solution :
-	Jour 0 : Hotel0 -> Site109(24) -> Site79(2) -> Site54(14) -> Site63(28) -> Site16(24) -> Site99(10) -> Site60(3) -> Site36(21) -> Site20(26) -> Site56(1) -> Site47(11) -> Site27(27) -> Hotel0 | Score : 191 | Distance : 26.4108696522689 | DistanceMax : 29.7572
-	Jour 1 : Hotel0 -> Site43(8) -> Site86(10) -> Site70(21) -> Site94(8) -> Site42(24) -> Site92(13) -> Site22(16) -> Site80(17) -> Hotel0 | Score : 117 | Distance : 22.32992737388855 | DistanceMax : 24.5204
-	Jour 2 : Hotel0 -> Site105(22) -> Site31(23) -> Site107(8) -> Site100(11) -> Hotel0 | Score : 64 | Distance : 23.385966937708705 | DistanceMax : 24.5891
-	Jour 3 : Hotel0 -> Site55(27) -> Site66(2) -> Hotel10 | Score : 29 | Distance : 21.52329403716869 | DistanceMax : 24.8695
-	Jour 4 : Hotel10 ->  -> Hotel1 | Score : 0 | Distance : 14.266695482836942 | DistanceMax : 16.2543
-Score : 401
-Time: 0.177
+	Jour 0 : Hotel0 -> Site109(24) -> Site63(28) -> Site16(24) -> Site99(10) -> Site105(22) -> Site31(23) -> Site76(25) -> Site97(24) -> Hotel10 | Score : 180 | Distance : 29.041487506034606 | DistanceMax : 29.7572
+	Jour 1 : Hotel10 -> Site47(11) -> Site20(26) -> Site27(27) -> Site80(17) -> Site22(16) -> Site42(24) -> Site94(8) -> Site66(2) -> Site55(27) -> Site64(5) -> Site72(14) -> Hotel9 | Score : 177 | Distance : 24.369365525013823 | DistanceMax : 24.5204
+	Jour 2 : Hotel9 -> Site40(24) -> Site108(28) -> Site96(29) -> Site90(24) -> Site70(21) -> Hotel3 | Score : 126 | Distance : 23.699100414936034 | DistanceMax : 24.5891
+	Jour 3 : Hotel3 -> Site92(13) -> Site23(21) -> Site82(4) -> Site93(19) -> Site35(13) -> Site101(17) -> Site84(1) -> Site25(17) -> Site30(27) -> Site61(13) -> Hotel5 | Score : 145 | Distance : 24.694521825458196 | DistanceMax : 24.8695
+	Jour 4 : Hotel5 -> Site44(5) -> Site21(24) -> Site32(18) -> Site58(20) -> Site87(13) -> Site91(19) -> Site37(23) -> Site95(1) -> Hotel1 | Score : 123 | Distance : 13.581702827331767 | DistanceMax : 16.2543
+Score : 751
+Time: 1.223
