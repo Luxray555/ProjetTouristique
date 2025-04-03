@@ -168,6 +168,19 @@ public class Solution {
         }
     }
 
+    private void setSolution(Solution solution){
+        List<Route> routes = new ArrayList<>();
+        for(Route route : solution.getRoutes()){
+            Route newRoute = new Route(route.getId(), hotels.get(route.getHotelStart().getId()), hotels.get(route.getHotelEnd().getId()), route.getDistanceMax());
+            for(SiteNode site : route.getSites()){
+                newRoute.addLast(getSiteWithId(site.getId()));
+            }
+            routes.add(newRoute);
+        }
+        this.routes = routes;
+        this.score = solution.getScore();
+    }
+
     @Override
     public String toString() {
         return "Solution :" +

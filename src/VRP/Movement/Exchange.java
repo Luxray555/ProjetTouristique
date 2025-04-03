@@ -118,6 +118,48 @@ public class Exchange implements Movement {
         }
     }
 
+    public boolean applyTS(Solution s, List<Pair> tabuList, int tabuSize, double bestValue) {
+        double max = -1;
+        Pair best = new Pair(-1, -1);
+
+        for(int i = 0; i < s.getSites().size() ; i++){
+            for(int j = i + 1; j < s.getSites().size(); j++){
+                if(check(s, i, j)){
+                    double eval = evaluate(s, i, j);
+                    if(eval > bestValue && eval > max){
+                        max = eval;
+                        best.setI(i);
+                        best.setJ(j);
+                    }else if(eval > max && !isTabu(i, j, tabuList)){
+                        max = eval;
+                        best.setI(i);
+                        best.setJ(j);
+                    }
+                }
+            }
+        }
+        if(max > -1){
+            apply(s, best.getI(), best.getJ());
+            tabuList.add(best);
+            if(tabuList.size() > tabuSize){
+                tabuList.remove(0);
+            }
+            System.out.println("Échange effectué entre les noeuds " + (best.getI()+Instance.getNbHotel()) + " et " + (best.getJ() + Instance.getNbHotel()));
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isTabu(int i, int j, List<Pair> tabuList){
+        for(int r = 0; r < tabuList.size(); r++){
+            Pair pair = tabuList.get(r);
+            if((pair.getI() == i && pair.getJ() == j) || (pair.getJ() == i && pair.getJ() == j)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public boolean applyBestImprovement(Solution s) {
         double max = 0;
@@ -140,7 +182,6 @@ public class Exchange implements Movement {
             System.out.println("Échange effectué entre les noeuds " + (bestPair.getI()+Instance.getNbHotel()) + " et " + (bestPair.getJ() + Instance.getNbHotel()));
             return true;
         }
-
         return false;
     }
 

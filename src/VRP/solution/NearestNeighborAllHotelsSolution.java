@@ -15,18 +15,16 @@ public class NearestNeighborAllHotelsSolution extends NearestNeighborSolution {
         super();
     }
 
-    private List<List<Route>> solutions = new ArrayList<>();
-
     @Override
     public void construct() {
-        this.constructHotels();
-        this.constructSitesAllHotels();
-        this.routes = getBestSolution();
+        List<List<Route>> solutions =  this.constructHotels();
+        solutions = this.constructSitesAllHotels(solutions);
+        this.routes = getBestSolution(solutions);
         this.resetLinks();
         this.evaluate();
     }
 
-    protected List<Route> getBestSolution(){
+    protected List<Route> getBestSolution(List<List<Route>> solutions){
         int maxScore = 0;
         List<Route> bestSolution = null;
         for(List<Route> solution : solutions){
@@ -42,21 +40,11 @@ public class NearestNeighborAllHotelsSolution extends NearestNeighborSolution {
         return bestSolution;
     }
 
-    protected void constructSitesAllHotels(){
+    protected List<List<Route>> constructSitesAllHotels(List<List<Route>> solutions){
         for(List<Route> solution : solutions){
             constructSites(solution);
         }
-    }
 
-    @Override
-    protected void constructHotels() {
-        List<Route> routesConstruct = new ArrayList<>(this.routes);
-
-        List<List<Route>> solutions = new ArrayList<>();
-        recursiveHotels(routesConstruct.get(0), routesConstruct, solutions);
-
-        sortedSolutions(solutions);
-
-        this.solutions = solutions;
+        return solutions;
     }
 }

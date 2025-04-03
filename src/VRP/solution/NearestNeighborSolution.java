@@ -17,13 +17,14 @@ public class NearestNeighborSolution extends Solution{
 
     @Override
     public void construct() {
-        this.constructHotels();
-        this.constructSites(routes);
+        List<List<Route>> solutions = this.constructHotels();
+        solutions = this.constructSites(solutions.get(0));
+        this.routes = solutions.get(0);
         this.resetLinks();
         this.evaluate();
     }
 
-    protected void constructSites(List<Route> routes){
+    protected List<List<Route>> constructSites(List<Route> routes){
         List<Node> visited = new ArrayList<>();
         for(int i = 0; i < routes.size(); i++){
             Route route = routes.get(i);
@@ -39,9 +40,12 @@ public class NearestNeighborSolution extends Solution{
                 }
             }
         }
+        List<List<Route>> solutions = new ArrayList<>();
+        solutions.add(routes);
+        return solutions;
     }
 
-    protected void constructHotels() {
+    protected List<List<Route>> constructHotels() {
         List<Route> routesConstruct = new ArrayList<>(this.routes);
 
         List<List<Route>> solutions = new ArrayList<>();
@@ -49,15 +53,11 @@ public class NearestNeighborSolution extends Solution{
 
         sortedSolutions(solutions);
 
-        this.routes = solutions.isEmpty() ? routesConstruct : solutions.get(0);
+        for(Node node : this.nodes){
+            node.removeAllRoutes();
+        }
 
-        for(HotelNode hotel : hotels){
-            hotel.removeAllRoutes();
-        }
-        for(Route route : this.routes){
-            route.getHotelStart().addRoute(route);
-            route.getHotelEnd().addRoute(route);
-        }
+        return solutions;
     }
 
     protected void sortedSolutions(List<List<Route>> solution){

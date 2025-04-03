@@ -1,11 +1,11 @@
 Input File: data/instance12.txt
 INPUT=data/instance12.txt
-CONSTRUCT=4
+CONSTRUCT=0
 OUTPUT=result/instance12.sol
-METHOD=4
+METHOD=5
 Solution :
-	Jour 0 : Hotel0 ->  -> Hotel2 | Score : 0 | Distance : 17.804493814764857 | DistanceMax : 20.5138
-	Jour 1 : Hotel2 -> Site17(41) -> Site62(22) -> Site14(28) -> Site63(20) -> Site20(27) -> Site27(23) -> Hotel3 | Score : 161 | Distance : 22.848005547048658 | DistanceMax : 23.6031
-	Jour 2 : Hotel3 ->  -> Hotel1 | Score : 0 | Distance : 11.180339887498949 | DistanceMax : 15.654
-Score : 161
-Time: 0.328
+	Jour 0 : Hotel0 -> Site45(14) -> Site47(18) -> Hotel0 | Score : 32 | Distance : 18.626540606729783 | DistanceMax : 20.5138
+	Jour 1 : Hotel0 -> Site35(16) -> Site36(16) -> Hotel0 | Score : 32 | Distance : 18.03275925283613 | DistanceMax : 23.6031
+	Jour 2 : Hotel0 ->  -> Hotel1 | Score : 0 | Distance : 0.0 | DistanceMax : 15.654
+Score : 64
+Time: 0.009

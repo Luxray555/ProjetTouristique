@@ -1,13 +1,13 @@
 Input File: data/instance24.txt
 INPUT=data/instance24.txt
-CONSTRUCT=4
+CONSTRUCT=0
 OUTPUT=result/instance24.sol
-METHOD=4
+METHOD=5
 Solution :
-	Jour 0 : Hotel0 -> Site63(28) -> Site16(24) -> Site109(24) -> Site60(3) -> Site31(23) -> Site76(25) -> Site100(11) -> Site47(11) -> Hotel10 | Score : 149 | Distance : 29.557701504838555 | DistanceMax : 29.7572
-	Jour 1 : Hotel10 -> Site20(26) -> Site27(27) -> Site80(17) -> Site22(16) -> Site94(8) -> Site42(24) -> Site92(13) -> Site55(27) -> Site64(5) -> Site40(24) -> Hotel9 | Score : 187 | Distance : 24.190133701367728 | DistanceMax : 24.5204
-	Jour 2 : Hotel9 -> Site108(28) -> Site96(29) -> Site90(24) -> Site70(21) -> Hotel3 | Score : 102 | Distance : 23.699100414936034 | DistanceMax : 24.5891
-	Jour 3 : Hotel3 -> Site23(21) -> Site82(4) -> Site93(19) -> Site35(13) -> Site101(17) -> Site84(1) -> Site25(17) -> Site30(27) -> Site61(13) -> Hotel5 | Score : 132 | Distance : 24.69452182545819 | DistanceMax : 24.8695
-	Jour 4 : Hotel5 -> Site21(24) -> Site44(5) -> Site32(18) -> Site58(20) -> Site75(13) -> Site87(13) -> Site91(19) -> Site37(23) -> Hotel1 | Score : 135 | Distance : 16.155011632886893 | DistanceMax : 16.2543
-Score : 705
-Time: 3.386
+	Jour 0 : Hotel0 -> Site109(24) -> Site79(2) -> Site54(14) -> Site63(28) -> Site16(24) -> Site99(10) -> Site60(3) -> Site36(21) -> Site20(26) -> Site56(1) -> Site47(11) -> Site27(27) -> Hotel0 | Score : 191 | Distance : 26.4108696522689 | DistanceMax : 29.7572
+	Jour 1 : Hotel0 -> Site43(8) -> Site86(10) -> Site70(21) -> Site94(8) -> Site42(24) -> Site92(13) -> Site22(16) -> Site80(17) -> Hotel0 | Score : 117 | Distance : 22.32992737388855 | DistanceMax : 24.5204
+	Jour 2 : Hotel0 -> Site105(22) -> Site31(23) -> Site107(8) -> Site100(11) -> Hotel0 | Score : 64 | Distance : 23.385966937708705 | DistanceMax : 24.5891
+	Jour 3 : Hotel0 -> Site55(27) -> Site66(2) -> Hotel10 | Score : 29 | Distance : 21.52329403716869 | DistanceMax : 24.8695
+	Jour 4 : Hotel10 ->  -> Hotel1 | Score : 0 | Distance : 14.266695482836942 | DistanceMax : 16.2543
+Score : 401
+Time: 0.177
