@@ -1,6 +1,7 @@
 package VRP.model;
 
 import VRP.Instance;
+import VRP.checker.Checker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -190,15 +191,19 @@ public class Route {
     public void setHotelStart(HotelNode hotelStart) {
         if(!sites.isEmpty()) {
             distanceTotal -= Instance.getDistance(this.hotelStart.getId(), sites.get(0).getId());
-            this.hotelStart = hotelStart;
-            distanceTotal += Instance.getDistance(this.hotelStart.getId(), sites.get(0).getId());
+            distanceTotal += Instance.getDistance(hotelStart.getId(), sites.get(0).getId());
         }else{
-            this.hotelStart = hotelStart;
-            if(this.hotelEnd != null && this.hotelStart != null){
-                distanceTotal = Instance.getDistance(this.hotelStart.getId(), this.hotelEnd.getId());
+            if(this.hotelEnd != null){
+                distanceTotal = Instance.getDistance(hotelStart.getId(), this.hotelEnd.getId());
+            }else{
+                distanceTotal = 0;
             }
         }
+        if (this.hotelStart != null) {
+            this.hotelStart.removeRoute(this);
+        }
         hotelStart.addRoute(this);
+        this.hotelStart = hotelStart;
     }
 
     public HotelNode getHotelEnd() {
@@ -208,24 +213,28 @@ public class Route {
     public void setHotelEnd(HotelNode hotelEnd) {
         if(!sites.isEmpty()) {
             distanceTotal -= Instance.getDistance(sites.get(sites.size() - 1).getId(), this.hotelEnd.getId());
-            this.hotelEnd = hotelEnd;
-            distanceTotal += Instance.getDistance(sites.get(sites.size() - 1).getId(), this.hotelEnd.getId());
+            distanceTotal += Instance.getDistance(sites.get(sites.size() - 1).getId(), hotelEnd.getId());
         }else{
-            this.hotelEnd = hotelEnd;
-            if(this.hotelStart != null && this.hotelEnd != null){
-                distanceTotal = Instance.getDistance(this.hotelStart.getId(), this.hotelEnd.getId());
+            if(this.hotelStart != null){
+                distanceTotal = Instance.getDistance(this.hotelStart.getId(), hotelEnd.getId());
+            }else{
+                distanceTotal = 0;
             }
         }
         if(this.hotelEnd != null){
             this.hotelEnd.removeRoute(this);
         }
         hotelEnd.addRoute(this);
+        this.hotelEnd = hotelEnd;
+
     }
 
     public void removeHotelEnd(){
         if(hotelEnd != null){
             if(!sites.isEmpty()){
                 distanceTotal -= Instance.getDistance(sites.get(sites.size() - 1).getId(), hotelEnd.getId());
+            }else{
+                distanceTotal = 0;
             }
             hotelEnd.removeRoute(this);
             hotelEnd = null;
@@ -236,6 +245,8 @@ public class Route {
         if(hotelStart != null){
             if(!sites.isEmpty()){
                 distanceTotal -= Instance.getDistance(hotelStart.getId(), sites.get(0).getId());
+            }else{
+                distanceTotal = 0;
             }
             hotelStart.removeRoute(this);
             hotelStart = null;

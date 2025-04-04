@@ -1,6 +1,7 @@
 package VRP.solution;
 
 import VRP.*;
+import VRP.checker.Checker;
 import VRP.model.HotelNode;
 import VRP.model.Node;
 import VRP.model.Route;
@@ -33,6 +34,11 @@ public class NearestNeighborSolution extends Solution{
                 Result next = nearestSite(current, route, visited);
                 if(next.getNode() != null && route.getDistanceMax() > route.getDistanceTotal() + next.getDistance()){
                     route.addLast((SiteNode)next.getNode());
+                    if(!Checker.checkDistanceRoute(this)){
+                        System.out.println("0");
+                        System.out.println("Error: distance route is not valid");
+                        System.exit(1);
+                    }
                     visited.add(next.getNode());
                     current = next.getNode();
                 }else{
@@ -52,10 +58,6 @@ public class NearestNeighborSolution extends Solution{
         recursiveHotels(routesConstruct.get(0), routesConstruct, solutions);
 
         sortedSolutions(solutions);
-
-        for(Node node : this.nodes){
-            node.removeAllRoutes();
-        }
 
         return solutions;
     }
@@ -82,12 +84,32 @@ public class NearestNeighborSolution extends Solution{
             if (result.getDistance() <= route.getDistanceMax()) {
                 if (routesConstruct.size() - 1 > route.getId()) {
                     route.setHotelEnd((HotelNode) result.getNode());
+                    if(!Checker.checkDistanceRoute(this)){
+                        System.out.println("1");
+                        System.out.println("Error: distance route is not valid");
+                        System.exit(1);
+                    }
                     routesConstruct.get(route.getId() + 1).setHotelStart((HotelNode) result.getNode());
+                    if(!Checker.checkDistanceRoute(this)){
+                        System.out.println("2");
+                        System.out.println("Error: distance route is not valid");
+                        System.exit(1);
+                    }
 
                     recursiveHotels(routesConstruct.get(route.getId() + 1), routesConstruct, solutions);
 
                     route.removeHotelEnd();
+                    if(!Checker.checkDistanceRoute(this)){
+                        System.out.println("3");
+                        System.out.println("Error: distance route is not valid");
+                        System.exit(1);
+                    }
                     routesConstruct.get(route.getId() + 1).removeHotelStart();
+                    if(!Checker.checkDistanceRoute(this)){
+                        System.out.println("4");
+                        System.out.println("Error: distance route is not valid");
+                        System.exit(1);
+                    }
                 }
             }
             orderedHotels.remove(result.getNode());

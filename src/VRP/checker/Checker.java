@@ -44,10 +44,16 @@ public class Checker {
                 distance += Instance.getDistance(route.getSites().get(i).getId(), route.getSites().get(i+1).getId());
             }
             if(!route.getSites().isEmpty()) {
-                distance += Instance.getDistance(route.getHotelStart().getId(), route.getSites().get(0).getId());
-                distance += Instance.getDistance(route.getSites().get(route.getSites().size() - 1).getId(), route.getHotelEnd().getId());
+                if(route.getHotelStart() != null) {
+                    distance += Instance.getDistance(route.getHotelStart().getId(), route.getSites().get(0).getId());
+                }
+                if(route.getHotelEnd() != null) {
+                    distance += Instance.getDistance(route.getSites().get(route.getSites().size() - 1).getId(), route.getHotelEnd().getId());
+                }
             }else{
-                distance += Instance.getDistance(route.getHotelStart().getId(), route.getHotelEnd().getId());
+                if(route.getHotelStart() != null && route.getHotelEnd() != null) {
+                    distance += Instance.getDistance(route.getHotelStart().getId(), route.getHotelEnd().getId());
+                }
             }
             if(Math.round(distance) != Math.round(route.getDistanceTotal())){
                 System.out.println("Distance Route " + route.getId() + " : " + route.getDistanceTotal() + " != " + distance + " : NON OK");
