@@ -1,7 +1,6 @@
 package VRP.model;
 
 import VRP.Instance;
-import VRP.checker.Checker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -199,10 +198,6 @@ public class Route {
                 distanceTotal = 0;
             }
         }
-        if (this.hotelStart != null) {
-            this.hotelStart.removeRoute(this);
-        }
-        hotelStart.addRoute(this);
         this.hotelStart = hotelStart;
     }
 
@@ -248,7 +243,6 @@ public class Route {
             }else{
                 distanceTotal = 0;
             }
-            hotelStart.removeRoute(this);
             hotelStart = null;
         }
     }

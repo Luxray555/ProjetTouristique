@@ -43,7 +43,10 @@ public abstract class Node {
     }
 
     public void removeRoute(Route route) {
-        this.routes.remove(route);
+        Route ru = this.routes.stream().filter(r -> r.getId() == route.getId()).findFirst().orElse(null);
+        if (ru != null) {
+            this.routes.remove(ru);
+        }
     }
 
     public void removeAllRoutes(){

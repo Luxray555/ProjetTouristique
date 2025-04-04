@@ -83,7 +83,7 @@ public class Checker {
                     return false;
                 }
             }
-            if((route.getHotelStart() != null && !route.getHotelStart().getRoutes().contains(route)) || (route.getHotelEnd() != null && !route.getHotelEnd().getRoutes().contains(route))){
+            if((route.getHotelEnd() != null && !route.getHotelEnd().getRoutes().contains(route))){
                 System.out.println(route.getHotelStart().getRoutes().size());
                 System.out.println(route.getHotelEnd().getRoutes().size());
                 System.out.println("Link Route " + route.getId() + " : Hotel : NON OK");

@@ -1,7 +1,6 @@
 package VRP.Movement;
 
 import VRP.*;
-import VRP.checker.Checker;
 import VRP.model.*;
 import VRP.solution.Solution;
 

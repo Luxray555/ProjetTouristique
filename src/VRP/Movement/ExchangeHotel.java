@@ -1,7 +1,6 @@
 package VRP.Movement;
 
 import VRP.Instance;
-import VRP.checker.Checker;
 import VRP.model.*;
         import VRP.solution.Solution;
 
@@ -30,8 +29,8 @@ public class ExchangeHotel {
                     return deletedSite;
                 } else {
                     Solution temp = s.copy();
-                    temp.getRoutes().get(route.getId()).setHotelEnd(hotel);
-                    temp.getRoutes().get(nextRoute.getId()).setHotelStart(hotel);
+                    temp.getRoutes().get(route.getId()).setHotelEnd(temp.getHotels().get(hotel.getId()));
+                    temp.getRoutes().get(nextRoute.getId()).setHotelStart(temp.getHotels().get(hotel.getId()));
                     deletedSite.addAll(refindById(s, adjustDistance(temp, route.getId())));
                     deletedSite.addAll(refindById(s, adjustDistance(temp, nextRoute.getId())));
                     return deletedSite;
@@ -39,13 +38,15 @@ public class ExchangeHotel {
 
             } else if (route.getSites().isEmpty() && !nextRoute.getSites().isEmpty()) {
                 Solution temp = s.copy();
-                temp.getRoutes().get(nextRoute.getId()).setHotelStart(hotel);
+                temp.getRoutes().get(route.getId()).setHotelEnd(temp.getHotels().get(hotel.getId()));
+                temp.getRoutes().get(nextRoute.getId()).setHotelStart(temp.getHotels().get(hotel.getId()));
                 deletedSite.addAll(refindById(s, adjustDistance(temp, nextRoute.getId())));
                 return deletedSite;
 
             } else if (nextRoute.getSites().isEmpty() && !route.getSites().isEmpty()) {
                 Solution temp = s.copy();
-                temp.getRoutes().get(route.getId()).setHotelEnd(hotel);
+                temp.getRoutes().get(route.getId()).setHotelEnd(temp.getHotels().get(hotel.getId()));
+                temp.getRoutes().get(nextRoute.getId()).setHotelStart(temp.getHotels().get(hotel.getId()));
                 deletedSite.addAll(refindById(s, adjustDistance(temp, route.getId())));
                 return deletedSite;
             } else {
@@ -60,18 +61,14 @@ public class ExchangeHotel {
 
         Route route = s.getRoutes().get(idRoute);
 
-        if (route.getDistanceMax() < route.getDistanceTotal()) {
-            List<SiteNode> ordered = orderedSites(route.getSites());
+        List<SiteNode> ordered = orderedSites(route.getSites());
 
-            for (SiteNode site : ordered) {
-                route.removeSite(site);
-                deletedSites.add(site);
-                if (route.getDistanceTotal() <= route.getDistanceMax()) {
-                    break;
-                }
-            }
+        int i = 0;
+        while (route.getDistanceTotal() > route.getDistanceMax() && i < ordered.size()) {
+            route.removeSite(ordered.get(i));
+            deletedSites.add(ordered.get(i));
+            i++;
         }
-
         return deletedSites;
     }
 
@@ -106,20 +103,14 @@ public class ExchangeHotel {
         return Instance.getDistance(node.getId(), node.getNext().getId()) + Instance.getDistance(node.getId(), node.getPrevious().getId());
     }
 
-    private double getDeletedDiffNeighbour(SiteNode node){
-        return -getNeighboursDistance(node) +
-                Instance.getDistance(node.getPrevious().getId(), node.getNext().getId());
-    }
-
     public void apply(Route route, HotelNode hotel, List<SiteNode> deletedSites, Solution s){
         route.setHotelEnd(hotel);
+        s.getRoutes().get(route.getId() + 1).setHotelStart(hotel);
         for(SiteNode site : deletedSites){
             route.removeSite(site);
             s.getRoutes().get(route.getId() + 1).removeSite(site);
-            System.out.println("Suppression du site " + site.getId() + " de la route " + route.getId());
+            s.setScore(s.getScore() - site.getScore());
         }
-        s.getRoutes().get(route.getId() + 1).setHotelStart(hotel);
-        s.evaluate();
     }
 
     public boolean applyBestImprovement(Solution s) {
@@ -129,12 +120,13 @@ public class ExchangeHotel {
 
         for(int i = 0; i < s.getRoutes().size() - 1; i++){
             for(HotelNode h : s.getHotels()){
-                deletedSites = check(s.getRoutes().get(i), h, s);
-                if(deletedSites != null){
-                    int score = evaluate(deletedSites, s);
+                List<SiteNode> deletedSitesHere  = check(s.getRoutes().get(i), h, s);
+                if(deletedSitesHere != null){
+                    int score = evaluate(deletedSitesHere, s);
                     if(score > max){
                         max = score;
                         hotel = h;
+                        deletedSites = deletedSitesHere;
                     }
                 }
             }
@@ -155,17 +147,19 @@ public class ExchangeHotel {
         for(int i = 0; i < s.getRoutes().size() - 1; i++){
             for(HotelNode h : s.getHotels()){
                 if(!isTabu(i, h.getId(), tabuList)){
-                    deletedSites = check(s.getRoutes().get(i), h, s);
-                    if(deletedSites != null){
-                        int eval = evaluate(deletedSites, s);
+                    List<SiteNode> deletedSitesHere = check(s.getRoutes().get(i), h, s);
+                    if(deletedSitesHere != null){
+                        int eval = evaluate(deletedSitesHere, s);
                         if(eval > bestValue && eval > max){
                             max = eval;
                             best.setI(i);
                             best.setJ(h.getId());
+                            deletedSites = deletedSitesHere;
                         }else if(eval > max && !isTabu(i, h.getId(), tabuList)){
                             max = eval;
                             best.setI(i);
                             best.setJ(h.getId());
+                            deletedSites = deletedSitesHere;
                         }
                     }
                 }
