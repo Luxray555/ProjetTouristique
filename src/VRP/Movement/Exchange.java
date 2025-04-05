@@ -1,6 +1,7 @@
 package VRP.Movement;
 
 import VRP.*;
+import VRP.checker.Checker;
 import VRP.model.*;
 import VRP.solution.Solution;
 
@@ -28,31 +29,44 @@ public class Exchange implements Movement {
         double distanceAfterSwapJ = 0.0;
 
         if(routeI != null && routeJ != null){
-            if(nodeI.getPrevious().getId() == nodeJ.getId()){
-                distanceBeforeSwapI = Instance.getDistance(nodeJ.getPrevious().getId(), nodeJ.getId()) +
-                        Instance.getDistance(nodeJ.getId(), nodeI.getId()) +
+            if(routeI == routeJ) {
+                if (nodeI.getPrevious().getId() == nodeJ.getId()) {
+                    distanceBeforeSwapI = Instance.getDistance(nodeJ.getPrevious().getId(), nodeJ.getId()) +
+                            Instance.getDistance(nodeJ.getId(), nodeI.getId()) +
+                            Instance.getDistance(nodeI.getId(), nodeI.getNext().getId());
+                    distanceAfterSwapI = Instance.getDistance(nodeJ.getPrevious().getId(), nodeI.getId()) +
+                            Instance.getDistance(nodeI.getId(), nodeJ.getId()) +
+                            Instance.getDistance(nodeJ.getId(), nodeI.getNext().getId());
+                    return (routeI.getDistanceTotal() - distanceBeforeSwapI + distanceAfterSwapI <= routeI.getDistanceMax());
+                } else if (nodeJ.getPrevious().getId() == nodeI.getId()) {
+                    distanceBeforeSwapJ = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getId()) +
+                            Instance.getDistance(nodeI.getId(), nodeJ.getId()) +
+                            Instance.getDistance(nodeJ.getId(), nodeJ.getNext().getId());
+                    distanceAfterSwapJ = Instance.getDistance(nodeI.getPrevious().getId(), nodeJ.getId()) +
+                            Instance.getDistance(nodeJ.getId(), nodeI.getId()) +
+                            Instance.getDistance(nodeI.getId(), nodeJ.getNext().getId());
+                    return routeJ.getDistanceTotal() - distanceBeforeSwapJ + distanceAfterSwapJ <= routeJ.getDistanceMax();
+                }else{
+                    distanceBeforeSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getId()) +
+                            Instance.getDistance(nodeI.getId(), nodeI.getNext().getId()) +
+                            Instance.getDistance(nodeJ.getPrevious().getId(), nodeJ.getId()) +
+                            Instance.getDistance(nodeJ.getId(), nodeJ.getNext().getId());
+                    distanceAfterSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeJ.getId()) +
+                            Instance.getDistance(nodeJ.getId(), nodeI.getNext().getId()) +
+                            Instance.getDistance(nodeJ.getPrevious().getId(), nodeI.getId()) +
+                            Instance.getDistance(nodeI.getId(), nodeJ.getNext().getId());
+                    return (routeI.getDistanceTotal() - distanceBeforeSwapI + distanceAfterSwapI <= routeI.getDistanceMax());
+                }
+            }else {
+                distanceBeforeSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getId()) +
                         Instance.getDistance(nodeI.getId(), nodeI.getNext().getId());
-                distanceAfterSwapI = Instance.getDistance(nodeJ.getPrevious().getId(), nodeI.getId()) +
-                        Instance.getDistance(nodeI.getId(), nodeJ.getId()) +
+                distanceAfterSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeJ.getId()) +
                         Instance.getDistance(nodeJ.getId(), nodeI.getNext().getId());
-                return (routeI.getDistanceTotal() - distanceBeforeSwapI + distanceAfterSwapI <= routeI.getDistanceMax());
-            }else if(nodeJ.getPrevious().getId() == nodeI.getId()) {
-                distanceBeforeSwapJ = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getId()) +
-                        Instance.getDistance(nodeI.getId(), nodeJ.getId()) +
+                distanceBeforeSwapJ = Instance.getDistance(nodeJ.getPrevious().getId(), nodeJ.getId()) +
                         Instance.getDistance(nodeJ.getId(), nodeJ.getNext().getId());
-                distanceAfterSwapJ = Instance.getDistance(nodeI.getPrevious().getId(), nodeJ.getId()) +
-                        Instance.getDistance(nodeJ.getId(), nodeI.getId()) +
+                distanceAfterSwapJ = Instance.getDistance(nodeJ.getPrevious().getId(), nodeI.getId()) +
                         Instance.getDistance(nodeI.getId(), nodeJ.getNext().getId());
-                return (routeJ.getDistanceTotal() - distanceBeforeSwapJ + distanceAfterSwapJ <= routeJ.getDistanceMax());
             }
-            distanceBeforeSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeI.getId()) +
-                    Instance.getDistance(nodeI.getId(), nodeI.getNext().getId());
-            distanceAfterSwapI = Instance.getDistance(nodeI.getPrevious().getId(), nodeJ.getId()) +
-                    Instance.getDistance(nodeJ.getId(), nodeI.getNext().getId());
-            distanceBeforeSwapJ = Instance.getDistance(nodeJ.getPrevious().getId(), nodeJ.getId()) +
-                    Instance.getDistance(nodeJ.getId(), nodeJ.getNext().getId());
-            distanceAfterSwapJ = Instance.getDistance(nodeJ.getPrevious().getId(), nodeI.getId()) +
-                    Instance.getDistance(nodeI.getId(), nodeJ.getNext().getId());
 
             return (routeI.getDistanceTotal() - distanceBeforeSwapI + distanceAfterSwapI <= routeI.getDistanceMax()) &&
                     (routeJ.getDistanceTotal() - distanceBeforeSwapJ + distanceAfterSwapJ <= routeJ.getDistanceMax());
@@ -78,7 +92,6 @@ public class Exchange implements Movement {
     public int evaluate(Solution s, int i, int j) {
         SiteNode siteI = s.getSites().get(i);
         SiteNode siteJ = s.getSites().get(j);
-
         if (siteI.getRoutes().isEmpty()) {
             return s.getScore() - siteJ.getScore() + siteI.getScore();
         } else if (siteJ.getRoutes().isEmpty()) {
@@ -99,21 +112,42 @@ public class Exchange implements Movement {
         Route routeI = nodeI.getRoute(0);
         Route routeJ = nodeJ.getRoute(0);
 
-        int indexI = -1;
-        int indexJ = -1;
+        boolean areInSameRoute = routeI != null && routeI == routeJ;
 
-        if(routeI != null){
-            indexI = routeI.removeSite(nodeI);
+        boolean areNodesAdjacentJAfterI = nodeI.getNext() != null && nodeI.getNext().getId() == nodeJ.getId();
+
+        boolean areNodesAdjacentIAfterJ = nodeJ.getNext() != null && nodeJ.getNext().getId() == nodeI.getId();
+
+        if(areInSameRoute){
+            if(areNodesAdjacentIAfterJ){
+                routeI.removeSite(nodeI);
+                routeI.addSite(nodeI, routeI.getSites().indexOf(nodeJ));
+            }else if(areNodesAdjacentJAfterI) {
+                routeI.removeSite(nodeJ);
+                routeI.addSite(nodeJ, routeI.getSites().indexOf(nodeI));
+            }else{
+                int indexI = routeI.removeSite(nodeI);
+                routeI.addSite(nodeI, routeI.getSites().indexOf(nodeJ));
+                routeI.removeSite(nodeJ);
+                routeI.addSite(nodeJ, indexI);
+            }
+        }else if (routeI != null || routeJ != null) {
+            int indexI = -1;
+            int indexJ = -1;
+            if (routeI != null) {
+                indexI = routeI.removeSite(nodeI);
+            }
+            if (routeJ != null) {
+                indexJ = routeJ.removeSite(nodeJ);
+            }
+            if(indexI != -1){
+                routeI.addSite(nodeJ, indexI);
+            }
+            if(indexJ != -1){
+                routeJ.addSite(nodeI, indexJ);
+            }
         }
-        if(routeJ != null){
-            indexJ = routeJ.removeSite(nodeJ);
-        }
-        if(indexI != -1){
-            routeI.addSite(nodeJ, indexI);
-        }
-        if (indexJ != -1){
-            routeJ.addSite(nodeI, indexJ);
-        }
+
     }
 
     public boolean applyTS(Solution s, List<Pair> tabuList, int tabuSize, double bestValue) {
@@ -142,7 +176,6 @@ public class Exchange implements Movement {
             if(tabuList.size() > tabuSize){
                 tabuList.remove(0);
             }
-            System.out.println("Échange effectué entre les noeuds " + (best.getI()+Instance.getNbHotel()) + " et " + (best.getJ() + Instance.getNbHotel()));
             return true;
         }
         return false;
@@ -177,7 +210,6 @@ public class Exchange implements Movement {
         }
         if (max > s.getScore()) {
             apply(s, bestPair.getI(), bestPair.getJ());
-            System.out.println("Échange effectué entre les noeuds " + (bestPair.getI()+Instance.getNbHotel()) + " et " + (bestPair.getJ() + Instance.getNbHotel()));
             return true;
         }
         return false;
@@ -194,7 +226,6 @@ public class Exchange implements Movement {
             int i = pair.getI();
             int j = pair.getJ();
             if (check(s, i, j) && evaluate(s, i, j) > s.getScore()) {
-                System.out.println("Échange effectué entre les noeuds " + i + " et " + j);
                 apply(s, i, j);
                 return true;
             }
@@ -216,7 +247,6 @@ public class Exchange implements Movement {
             int j = pair.getJ();
 
             if (check(s, i, j)) {
-                System.out.println("Échange effectué entre les nœuds " + i + " et " + j);
                 apply(s, i, j);
                 applied++;
             }

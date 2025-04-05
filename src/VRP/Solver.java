@@ -111,10 +111,10 @@ public class Solver {
                 s.solveLNS();
                 break;
             case "4":
-                s.solveILS();
+                s.setSolution(s.solveILS());
                 break;
             case "5":
-                s.solveVND();
+                s.setSolution(s.solveVND());
                 break;
         }
     }

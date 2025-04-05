@@ -79,8 +79,6 @@ public class Relocate implements Movement {
         }
         if (max > s.getScore()) {
             apply(s, bestPair.getI(), bestPair.getJ());
-            System.out.println("Déplacement effectué du noeud " + (bestPair.getI() + Instance.getNbHotel()) +
-                    " vers " + (bestPair.getJ() + Instance.getNbHotel()));
             return true;
         }
         return false;
@@ -96,7 +94,6 @@ public class Relocate implements Movement {
             int i = pair.getI();
             int j = pair.getJ();
             if (check(s, i, j) && evaluate(s, i, j) > s.getScore()) {
-                System.out.println("Déplacement effectué du noeud " + i + " vers " + j);
                 apply(s, i, j);
                 return true;
             }
@@ -118,7 +115,6 @@ public class Relocate implements Movement {
             int j = pair.getJ();
 
             if (check(s, i, j)) {
-                System.out.println("Déplacement du nœud " + i + " vers la position de " + j);
                 apply(s, i, j);
                 applied++;
             }
@@ -129,8 +125,8 @@ public class Relocate implements Movement {
     public List<Pair> getPairs(Solution s) {
         List<Pair> toTest = new ArrayList<>();
 
-        for (int i = 0; i < s.getNodes().size(); i++) {
-            for (int j = 0; j < s.getNodes().size(); j++) {
+        for (int i = 0; i < s.getSites().size(); i++) {
+            for (int j = 0; j < s.getSites().size(); j++) {
                 if (i != j) {
                     toTest.add(new Pair(i, j));
                 }

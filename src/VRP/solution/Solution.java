@@ -2,12 +2,10 @@ package VRP.solution;
 
 import VRP.*;
 import VRP.Movement.Exchange;
+import VRP.Movement.ExchangeHotel;
 import VRP.Movement.Relocate;
 import VRP.checker.Checker;
-import VRP.model.HotelNode;
-import VRP.model.Node;
-import VRP.model.Route;
-import VRP.model.SiteNode;
+import VRP.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,19 +84,17 @@ public class Solution {
 
     }
 
-    public void solveILS(){
+    public Solution solveILS(){
         Solution best = this.copy();
-        for(int i = 0; i < 1000; i++){
-            Solution solution = best.copy();
-            deconstructSolution(20);
-            solution.solveVND();
-            if(solution.getScore() > best.getScore()){
-                best = solution;
+        Solution current;
+        for(int i = 0; i < 10; i++){
+            current = best.solveVND();
+            if(current.getScore() > best.getScore()){
+                best = current;
             }
+            System.out.println(Checker.checkSolution(current));
         }
-        this.routes = best.getRoutes();
-        this.score = best.getScore();
-        Checker.checkSolution(this);
+        return best;
     }
 
     private void deconstructSolution(int percentage){
@@ -117,32 +113,63 @@ public class Solution {
 
     }
 
-    public void solveVND(){
+    public Solution solveVND(){
         boolean solved = false;
+        ExchangeHotel exchangeHotel = new ExchangeHotel();
         Exchange exchange = new Exchange();
         Relocate relocate = new Relocate();
+        Solution solution = this.copy();
+        Solution best = this.copy();
+        List<Pair> tabuListHotel = new ArrayList<>();
+        List<Pair> tabuList = new ArrayList<>();
         int i = 0;
+        System.out.println(Checker.checkSolution(this));
         while(!solved){
             switch(i){
                 case 0: {
-                    boolean verif = exchange.applyBestImprovement(this);
-                    if(!verif){
-                        i++;
+                    for(int j = 0; j < 50 ; j++){
+                        boolean verif = exchange.applyTS(solution, tabuList, 20, best.getScore());
+                        if(!verif){
+                            break;
+                        }else{
+                            if(solution.getScore() > best.getScore()){
+                                best = solution.copy();
+                            }
+                        }
                     }
-
+                    i++;
                     break;
                 }
                 case 1: {
-                    boolean verif = relocate.applyBestImprovement(this);
+                    boolean verif = relocate.applyBestImprovement(solution);
+                    if(!verif){
+                        i++;
+                    }else{
+                        if(solution.getScore() > best.getScore()){
+                            best = solution.copy();
+                        }
+                        i = 0;
+                    }
+                    break;
+                }
+                case 2: {
+                    boolean verif = exchangeHotel.applyTS(solution, tabuListHotel, (int)Math.pow(2, solution.getHotels().size()), best.getScore());
                     if(!verif){
                         solved = true;
                     }else{
+                        solution.deconstructSolution(20);
+                        while(relocate.applyBestImprovement(solution)){
+                            if(solution.getScore() > best.getScore()){
+                                best = solution.copy();
+                            }
+                        }
                         i = 0;
                     }
                     break;
                 }
             }
         }
+        return best;
     }
 
     public void solveLNS(){
@@ -165,7 +192,7 @@ public class Solution {
         }
     }
 
-    private void setSolution(Solution solution){
+    public void setSolution(Solution solution){
         List<Route> routes = new ArrayList<>();
         for(Route route : solution.getRoutes()){
             Route newRoute = new Route(route.getId(), hotels.get(route.getHotelStart().getId()), hotels.get(route.getHotelEnd().getId()), route.getDistanceMax());
@@ -197,7 +224,6 @@ public class Solution {
             newRoutes.add(newRoute);
         }
         solution.setRoutes(newRoutes);
-        System.out.println(Checker.checkSolution(solution));
         return solution;
     }
 }

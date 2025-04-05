@@ -133,7 +133,6 @@ public class ExchangeHotel {
         }
         if(hotel != null && deletedSites != null){
             apply(s.getRoutes().get(0), hotel, deletedSites, s);
-            System.out.println("Remplacement de l'hotel " + hotel.getId() + " sur la route " + s.getRoutes().get(0).getId());
             return true;
         }
         return false;
@@ -171,7 +170,6 @@ public class ExchangeHotel {
             if(tabuList.size() > tabuSize){
                 tabuList.remove(0);
             }
-            System.out.println("Remplacement de l'hotel " + best.getJ() + " sur la route " + best.getI());
             return true;
         }
         return false;

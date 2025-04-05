@@ -34,5 +34,15 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        /*
+        String[] parameters = {
+                "INPUT=data/instance1.txt",
+                "CONSTRUCT=4",
+                "METHOD=5",
+                "OUTPUT=result/instance1.sol"
+        };
+        Solver solver = new Solver(parameters);
+        solver.solve();
+         */
     }
 }
