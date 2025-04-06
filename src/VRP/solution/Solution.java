@@ -87,7 +87,7 @@ public class Solution {
     public Solution solveILS(){
         Solution best = this.copy();
         Solution current;
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 4; i++){
             current = best.solveVND();
             if(current.getScore() > best.getScore()){
                 best = current;
