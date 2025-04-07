@@ -34,11 +34,12 @@ public class Instance {
             return false;
         }
         int nbLine = 0;
+        int dataIndex = 0;
         double[][] coord = null;
         while (scanner.hasNextLine()){
             String line = scanner.nextLine();
             String[] lineSplit = line.split("\t");
-            if(line.isEmpty() || line.startsWith("-")){
+            if(line.isEmpty() || line.startsWith("--")){
                 continue;
             }else{
                 switch (nbLine) {
@@ -73,9 +74,10 @@ public class Instance {
                         break;
                     default:
                         try{
-                            coord[nbLine - 2][0] = Double.parseDouble(lineSplit[0]);
-                            coord[nbLine - 2][1] = Double.parseDouble(lineSplit[1]);
-                            scores[nbLine - 2] = Integer.parseInt(lineSplit[2]);
+                            coord[dataIndex][0] = Double.parseDouble(lineSplit[0]);
+                            coord[dataIndex][1] = Double.parseDouble(lineSplit[1]);
+                            scores[dataIndex] = Integer.parseInt(lineSplit[2]);
+                            dataIndex++;
                         }catch (NumberFormatException | ArrayIndexOutOfBoundsException e){
                             System.err.println("Ligne " + nbLine + " : Format coordonnée/scores non valide.");
                             return false;
@@ -108,6 +110,9 @@ public class Instance {
         System.out.println("Jours : " + jours);
         System.out.println("Distance Max Jours : " + Arrays.toString(distanceMaxJour));
         System.out.println("Scores : " + Arrays.toString(scores));
+        for(int i = 0; i < nbDestination ; i++){
+            System.out.println("Distance " + i + " : " + Arrays.toString(distances[i]));
+        }
 
     }
 

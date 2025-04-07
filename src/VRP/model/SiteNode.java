@@ -21,12 +21,4 @@ public class SiteNode extends Node{
             return null;
         }
     }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Site");
-        sb.append(getId());
-        sb.append("(" + getScore() + ")");
-        return sb.toString();
-    }
 }

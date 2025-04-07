@@ -64,14 +64,8 @@ public class Solver {
                 dir.mkdir();
             }
             try (FileWriter writer = new FileWriter(output, false)) {
-                writer.append("Input File: ").append(parameters.get("INPUT")).append("\n");
-                for (Map.Entry<String, String> entry : parameters.entrySet()) {
-                    if (!"input".equals(entry.getKey())) {
-                        writer.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
-                    }
-                }
-                writer.append(s+"\n");
-                writer.append("Time: ").append(String.valueOf(temps)).append("\n");
+                writer.append(s.toString());
+                writer.append(Double.toString(temps));
             } catch (IOException e) {
                 System.err.println("Erreur lors de l'écriture du fichier de sortie.");
             }

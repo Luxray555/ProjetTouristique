@@ -7,6 +7,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) {
+        /*
         File folder = new File("data");
         File[] listOfFiles = folder.listFiles();
 
@@ -22,6 +23,7 @@ public class Main {
                             "OUTPUT=result/" + file.getName().replace(".txt", ".sol")
                     };
                     Solver solver = new Solver(parameters);
+
                     solver.solve();
                     // Supposons que la classe Solver a une méthode getScore() qui retourne le score trouvé
                     int score = solver.getSolution().getScore();
@@ -34,15 +36,15 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*
+        */
         String[] parameters = {
                 "INPUT=data/instance1.txt",
                 "CONSTRUCT=4",
-                "METHOD=5",
+                "METHOD=4",
                 "OUTPUT=result/instance1.sol"
         };
         Solver solver = new Solver(parameters);
         solver.solve();
-         */
+
     }
 }

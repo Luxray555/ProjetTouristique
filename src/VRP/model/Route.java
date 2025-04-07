@@ -311,7 +311,6 @@ public class Route {
 
     @Override
     public String toString() {
-        return "Jour " + id + " : " + hotelStart + " -> " + sites.stream().map(Node::toString).collect(Collectors.joining(" -> ")) + " -> " + hotelEnd +
-                " | Score : " + scoreTotal + " | Distance : " + distanceTotal + " | DistanceMax : " + distanceMax;
+        return hotelStart + " " + sites.stream().map(Node::toString).collect(Collectors.joining(" ")) + (sites.isEmpty() ? "" : " ") + hotelEnd;
     }
 }

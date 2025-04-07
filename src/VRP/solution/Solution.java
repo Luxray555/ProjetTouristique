@@ -4,7 +4,6 @@ import VRP.*;
 import VRP.Movement.Exchange;
 import VRP.Movement.ExchangeHotel;
 import VRP.Movement.Relocate;
-import VRP.checker.Checker;
 import VRP.model.*;
 
 import java.util.ArrayList;
@@ -86,13 +85,16 @@ public class Solution {
 
     public Solution solveILS(){
         Solution best = this.copy();
-        Solution current;
-        for(int i = 0; i < 4; i++){
-            current = best.solveVND();
+        Solution current = this.copy();
+        List<Pair> tabuList = new ArrayList<>();
+        ExchangeHotel exchangeHotel = new ExchangeHotel();
+        for(int i = 0; i < 10; i++){
+            current = current.solveVND();
             if(current.getScore() > best.getScore()){
-                best = current;
+                best = current.copy();
             }
-            System.out.println(Checker.checkSolution(current));
+            exchangeHotel.applyTS(current, tabuList, this.getHotels().size(), best.getScore());
+            current.deconstructSolution(50);
         }
         return best;
     }
@@ -123,7 +125,6 @@ public class Solution {
         List<Pair> tabuListHotel = new ArrayList<>();
         List<Pair> tabuList = new ArrayList<>();
         int i = 0;
-        System.out.println(Checker.checkSolution(this));
         while(!solved){
             switch(i){
                 case 0: {
@@ -207,9 +208,12 @@ public class Solution {
 
     @Override
     public String toString() {
-        return "Solution :" +
-                routes.stream().map(Route::toString).reduce("", (a, b) -> a + "\n\t" + b) + "\n" +
-                "Score : " + score;
+        StringBuilder text = new StringBuilder();
+        text.append(score).append("\n");
+        for(Route route : routes){
+            text.append(route).append("\n");
+        }
+        return text.toString();
     }
 
     public Solution copy(){
