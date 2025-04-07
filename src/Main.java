@@ -19,6 +19,7 @@ public class Main {
                             "INPUT=data/" + file.getName(),
                             "CONSTRUCT=3",
                             "METHOD=4",
+                            "ITERATIONS=1",
                             "OUTPUT=result/" + file.getName().replace(".txt", ".sol")
                     };
                     Solver solver = new Solver(parameters);

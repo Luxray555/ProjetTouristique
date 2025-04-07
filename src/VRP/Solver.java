@@ -90,23 +90,41 @@ public class Solver {
     }
 
     private void solveMeta(Solution s){
+        int iterations = 1;
+        try{
+            if(Integer.parseInt(parameters.get("METHOD")) >= 4 && parameters.containsKey("ITERATIONS")){
+                try {
+                    iterations = Integer.parseInt(parameters.get("ITERATIONS"));
+                } catch (NumberFormatException e) {
+                    System.err.println("Parametre d'iterations invalide(ITERATIONS): " + parameters.get("ITERATIONS"));
+                }
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Parametre de methode invalide(METHOD): " + parameters.get("METHOD"));
+        }
         switch (parameters.get("METHOD")) {
+            case "0":
+                break;
             case "1":
-                s.solveTS();
+                s.setSolution(s.solveVND());
                 break;
             case "2":
                 s.setSolution(s.solveVNS());
-                Checker.checkSolution(s);
                 break;
-            case "3":
-                s.solveLNS();
+            case "3" :
+                s.setSolution(s.solveLNS());
                 break;
             case "4":
-                s.setSolution(s.solveILS());
-                Checker.checkSolution(s);
+                s.setSolution(s.solveILS(Solution::solveVND, iterations));
                 break;
             case "5":
-                s.setSolution(s.solveVND());
+                s.setSolution(s.solveILS(Solution::solveVNS, iterations));
+                break;
+            case "6":
+                s.setSolution(s.solveILS(Solution::solveLNS, iterations));
+                break;
+            default:
+                System.err.println("Parametre de methode invalide(METHOD): " + parameters.get("METHOD"));
                 break;
         }
     }

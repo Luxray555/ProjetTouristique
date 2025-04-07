@@ -8,6 +8,7 @@ import VRP.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class Solution {
     protected List<Route> routes;
@@ -83,13 +84,13 @@ public class Solution {
 
     }
 
-    public Solution solveILS(){
+    public Solution solveILS(Function<Solution, Solution> localSearchMethod, int iterations){
         Solution best = this.copy();
         Solution current = this.copy();
         List<Pair> tabuList = new ArrayList<>();
         ExchangeHotel exchangeHotel = new ExchangeHotel();
-        for(int i = 0; i < 10; i++){
-            current = current.solveVNS();
+        for(int i = 0; i < iterations; i++){
+            current = localSearchMethod.apply(current);
             if(current.getScore() > best.getScore()){
                 best = current.copy();
             }
@@ -109,10 +110,6 @@ public class Solution {
             }
         }
         this.evaluate();
-    }
-
-    public void solveTS(){
-
     }
 
     public Solution solveVND(){
@@ -173,8 +170,8 @@ public class Solution {
         return best;
     }
 
-    public void solveLNS(){
-
+    public Solution solveLNS(){
+        return this;
     }
 
     public Solution solveVNS(){
