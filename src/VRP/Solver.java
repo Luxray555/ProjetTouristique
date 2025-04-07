@@ -70,7 +70,7 @@ public class Solver {
                 System.err.println("Erreur lors de l'écriture du fichier de sortie.");
             }
         } else {
-            System.err.println("Sotie non spécifiée(OUTPUT).");
+            System.err.println("Sortie non spécifiée(OUTPUT).");
         }
     }
 
@@ -99,13 +99,15 @@ public class Solver {
                 s.solveTS();
                 break;
             case "2":
-                s.solveVNS();
+                s.setSolution(s.solveVNS());
+                Checker.checkSolution(s);
                 break;
             case "3":
                 s.solveLNS();
                 break;
             case "4":
                 s.setSolution(s.solveILS());
+                Checker.checkSolution(s);
                 break;
             case "5":
                 s.setSolution(s.solveVND());

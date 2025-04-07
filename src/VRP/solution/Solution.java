@@ -89,7 +89,7 @@ public class Solution {
         List<Pair> tabuList = new ArrayList<>();
         ExchangeHotel exchangeHotel = new ExchangeHotel();
         for(int i = 0; i < 10; i++){
-            current = current.solveVND();
+            current = current.solveVNS();
             if(current.getScore() > best.getScore()){
                 best = current.copy();
             }
@@ -177,8 +177,52 @@ public class Solution {
 
     }
 
-    public void solveVNS(){
+    public Solution solveVNS(){
+        Exchange exchange = new Exchange();
+        Relocate relocate = new Relocate();
+        ExchangeHotel exchangeHotel = new ExchangeHotel();
+
+        Solution best = this.copy();
+        Solution current = this.copy();
+        int k = 0;
+        int kMax = 3;
+
+        while(k < kMax){
+            Solution newSolution = current.copy();
+
+            switch(k){
+                case 0:
+                    exchange.applyRandom(newSolution, 10);
+                    break;
+                case 1:
+                    relocate.applyRandom(newSolution, 10);
+                    break;
+                case 2:
+                    // Petit ajustement : échange aléatoire d'hôtels entre deux jours
+                    int routeIndex = (int)(Math.random() * (newSolution.getRoutes().size() - 1));
+                    int hotelIndex = (int)(Math.random() * newSolution.getHotels().size());
+                    List<SiteNode> deletedSites = new ArrayList<>();
+                    List<Pair> dummyTabu = new ArrayList<>();
+                    if(exchangeHotel.applyTS(newSolution, dummyTabu, 1, best.getScore())){
+                        // On force un relocatement pour améliorer
+                        while(relocate.applyBestImprovement(newSolution)){}
+                    }
+                    break;
+            }
+
+            newSolution = newSolution.solveVND();
+
+            if(newSolution.getScore() > best.getScore()){
+                best = newSolution.copy();
+                current = newSolution.copy();
+                k = 0;
+            }else{
+                k++;
+            }
+        }
+        return best;
     }
+
 
     protected void resetLinks(){
         for(Node node : nodes){
