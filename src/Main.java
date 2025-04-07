@@ -7,7 +7,6 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) {
-        /*
         File folder = new File("data");
         File[] listOfFiles = folder.listFiles();
 
@@ -36,7 +35,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        */
+        /*
         String[] parameters = {
                 "INPUT=data/instance1.txt",
                 "CONSTRUCT=4",
@@ -45,6 +44,6 @@ public class Main {
         };
         Solver solver = new Solver(parameters);
         solver.solve();
-
+        */
     }
 }
