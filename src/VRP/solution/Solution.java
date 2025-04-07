@@ -195,13 +195,11 @@ public class Solution {
                     relocate.applyRandom(newSolution, 10);
                     break;
                 case 2:
-                    // Petit ajustement : échange aléatoire d'hôtels entre deux jours
                     int routeIndex = (int)(Math.random() * (newSolution.getRoutes().size() - 1));
                     int hotelIndex = (int)(Math.random() * newSolution.getHotels().size());
                     List<SiteNode> deletedSites = new ArrayList<>();
                     List<Pair> dummyTabu = new ArrayList<>();
                     if(exchangeHotel.applyTS(newSolution, dummyTabu, 1, best.getScore())){
-                        // On force un relocatement pour améliorer
                         while(relocate.applyBestImprovement(newSolution)){}
                     }
                     break;

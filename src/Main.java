@@ -25,7 +25,6 @@ public class Main {
                     Solver solver = new Solver(parameters);
 
                     solver.solve();
-                    // Supposons que la classe Solver a une méthode getScore() qui retourne le score trouvé
                     int score = solver.getSolution().getScore();
                     scores += score;
                     writer.write(file.getName() + " : " + score + "\n");
@@ -36,15 +35,5 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*
-        String[] parameters = {
-                "INPUT=data/instance1.txt",
-                "CONSTRUCT=4",
-                "METHOD=4",
-                "OUTPUT=result/instance1.sol"
-        };
-        Solver solver = new Solver(parameters);
-        solver.solve();
-        */
     }
 }
