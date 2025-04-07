@@ -103,7 +103,7 @@ public class Solution {
     private void deconstructSolution(int percentage){
         for(Route route : this.routes){
             int size = route.getSites().size();
-            for(int i = 0; i < size*(percentage/100); i++){
+            for(int i = 0; i < size*(percentage/100.0); i++){
                 int index = (int)(Math.random() * route.getSites().size());
                 SiteNode site = route.getSites().get(index);
                 route.removeSite(site);
