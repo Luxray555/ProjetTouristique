@@ -17,7 +17,7 @@ public class Main {
                     System.out.println(file.getName() + " : Started");
                     String[] parameters = {
                             "INPUT=data/" + file.getName(),
-                            "CONSTRUCT=4",
+                            "CONSTRUCT=3",
                             "METHOD=4",
                             "OUTPUT=result/" + file.getName().replace(".txt", ".sol")
                     };

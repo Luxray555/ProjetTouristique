@@ -39,14 +39,10 @@ public class Solver {
                 s.construct();
                 return s;
             case "2":
-                s = new NearestNeighborPotentialSolution();
-                s.construct();
-                return s;
-            case "3":
                 s = new NearestNeighborAllHotelsSolution();
                 s.construct();
                 return s;
-            case "4":
+            case "3":
                 s = new NearestNeighborScoreAllHotelsSolution();
                 s.construct();
                 return s;
