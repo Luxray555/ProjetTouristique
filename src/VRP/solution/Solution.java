@@ -56,33 +56,25 @@ public class Solution {
         return nodes;
     }
 
-    public List<SiteNode> getSites() {
-        return sites;
+    public List<SiteNode> getSites() { return sites;
     }
 
-    public SiteNode getSiteWithId(int i){
-        return sites.get(i - Instance.getNbHotel());
+    public SiteNode getSiteWithId(int i){ return sites.get(i - Instance.getNbHotel());
     }
 
-    public List<HotelNode> getHotels() {
-        return hotels;
+    public List<HotelNode> getHotels() { return hotels;
     }
 
-    public void setRoutes(List<Route> routes) {
-        this.routes = routes;
+    public void setRoutes(List<Route> routes) { this.routes = routes;
     }
 
-    public int getScore() {
-        return score;
+    public int getScore() { return score;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setScore(int score) { this.score = score;
     }
 
-    public void construct(){
-
-    }
+    public void construct(){}
 
     public Solution solveILS(Function<Solution, Solution> localSearchMethod, int iterations){
         Solution best = this.copy();
@@ -168,10 +160,6 @@ public class Solution {
             }
         }
         return best;
-    }
-
-    public Solution solveLNS(){
-        return this;
     }
 
     public Solution solveVNS(){

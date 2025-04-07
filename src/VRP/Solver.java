@@ -111,17 +111,11 @@ public class Solver {
             case "2":
                 s.setSolution(s.solveVNS());
                 break;
-            case "3" :
-                s.setSolution(s.solveLNS());
-                break;
             case "4":
                 s.setSolution(s.solveILS(Solution::solveVND, iterations));
                 break;
             case "5":
                 s.setSolution(s.solveILS(Solution::solveVNS, iterations));
-                break;
-            case "6":
-                s.setSolution(s.solveILS(Solution::solveLNS, iterations));
                 break;
             default:
                 System.err.println("Parametre de methode invalide(METHOD): " + parameters.get("METHOD"));
