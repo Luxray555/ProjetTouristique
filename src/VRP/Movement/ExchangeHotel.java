@@ -88,7 +88,6 @@ public class ExchangeHotel {
         return score;
     }
 
-    //Trié par score/distance voisin
     private List<SiteNode> orderedSites(List<SiteNode> sites){
         List<SiteNode> orderedSites = new ArrayList<>(sites);
         orderedSites.sort((s1, s2) -> {

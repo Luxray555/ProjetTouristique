@@ -61,7 +61,7 @@ public class Solver {
             }
             try (FileWriter writer = new FileWriter(output, false)) {
                 writer.append(s.toString());
-                writer.append(Double.toString(temps));
+                System.out.println("Time: " + temps + " seconds");
             } catch (IOException e) {
                 System.err.println("Erreur lors de l'écriture du fichier de sortie.");
             }
