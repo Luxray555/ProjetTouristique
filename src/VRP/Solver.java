@@ -92,7 +92,7 @@ public class Solver {
     private void solveMeta(Solution s){
         int iterations = 1;
         try{
-            if(Integer.parseInt(parameters.get("METHOD")) >= 4 && parameters.containsKey("ITERATIONS")){
+            if(Integer.parseInt(parameters.get("METHOD")) >= 3 && parameters.containsKey("ITERATIONS")){
                 try {
                     iterations = Integer.parseInt(parameters.get("ITERATIONS"));
                 } catch (NumberFormatException e) {
@@ -111,10 +111,10 @@ public class Solver {
             case "2":
                 s.setSolution(s.solveVNS());
                 break;
-            case "4":
+            case "3":
                 s.setSolution(s.solveILS(Solution::solveVND, iterations));
                 break;
-            case "5":
+            case "4":
                 s.setSolution(s.solveILS(Solution::solveVNS, iterations));
                 break;
             default:
