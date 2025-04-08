@@ -18,8 +18,8 @@ public class Main {
                     String[] parameters = {
                             "INPUT=data/" + file.getName(),
                             "CONSTRUCT=3",
-                            "METHOD=5",
-                            "ITERATIONS=2000",
+                            "METHOD=4",
+                            "ITERATIONS=10",
                             "OUTPUT=result/" + file.getName().replace(".txt", ".sol")
                     };
                     Solver solver = new Solver(parameters);
